@@ -1,4 +1,4 @@
-# our-jupiter
+# our-jupiter 프론트엔드 레포 
 
 ## Project setup
 ```
@@ -17,7 +17,7 @@ npm run build
 
 ### Run your unit tests
 ```
-npm run test:unit
+npm run test
 ```
 
 ### Lints and fixes files
