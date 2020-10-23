@@ -5,20 +5,41 @@ import store from './store';
 import Vuesax from 'vuesax';
 import 'vuesax/dist/vuesax.css';
 import 'material-icons/iconfont/material-icons.css';
-import BaseButton from '@/views/common/base-components/BaseButton.vue';
-import BaseCard from '@/views/common/base-components/BaseCard.vue';
-import BaseAvatar from '@/views/common/base-components/BaseAvatar.vue';
 
-Vue.config.productionTip = false;
+class OurJupiter {
+  public bootstrap() {
+    this.registerVuesax();
+    this.registerBaseComponents();
+    this.mountVueApp();
+  }
 
-Vue.use(Vuesax);
+  private registerVuesax() {
+    Vue.use(Vuesax);
+  }
 
-Vue.component('BaseButton', BaseButton);
-Vue.component('BaseCard', BaseCard);
-Vue.component('BaseAvatar', BaseAvatar);
+  private registerBaseComponents() {
+    const requireComponent = require.context('./views/common/base-components', false, /\.vue$/);
+    this.registerContext(requireComponent);
+  }
 
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-}).$mount('#app');
+  private registerContext(context: __WebpackModuleApi.RequireContext) {
+    context.keys().forEach(fileName => {
+      const componentConfig = context(fileName);
+      const componentName = fileName.replace(/^\.\//, '').replace(/\.\w+$/, '');
+      Vue.component(componentName, componentConfig.default || componentConfig);
+    });
+  }
+
+  private mountVueApp() {
+    Vue.config.productionTip = false;
+
+    new Vue({
+      router,
+      store,
+      render: h => h(App),
+    }).$mount('#app');
+  }
+
+}
+
+new OurJupiter().bootstrap();
