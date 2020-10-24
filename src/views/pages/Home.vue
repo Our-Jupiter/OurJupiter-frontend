@@ -5,6 +5,8 @@
     <BaseButton @click="openConfirm">confirm</BaseButton>
     <BaseCard title="Pot with a plant" :img="img" text="hi this is text" />
     <BaseAvatar :img="img" />
+    <BaseCheckBox v-model="checkbox" label="hello" checkedValue="hello" />
+    {{ checkbox }}
   </div>
 </template>
 
@@ -17,6 +19,7 @@ export default Vue.extend({
   data() {
     return {
       img: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Vue.png',
+      checkbox: 'hello',
     };
   },
   methods: {

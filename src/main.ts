@@ -13,6 +13,7 @@ class OurJupiter {
     this.registerVuePlugins();
     this.registerBaseComponents();
     this.registerPluginComponents();
+    this.registerInputComponents();
     this.mountVueApp();
   }
 
@@ -44,6 +45,11 @@ class OurJupiter {
 
   private registerPluginComponents() {
     const requireComponent = require.context('./views/common/plugin-components', false, /\.vue$/);
+    this.registerContext(requireComponent);
+  }
+
+  private registerInputComponents() {
+    const requireComponent = require.context('./views/common/input-components', false, /\.vue$/);
     this.registerContext(requireComponent);
   }
 
