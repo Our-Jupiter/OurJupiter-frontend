@@ -7,6 +7,8 @@
     <BaseAvatar :img="img" />
     <BaseCheckBox v-model="checkbox" label="hello" checkedValue="hello" />
     {{ checkbox }}
+    <BaseInput v-model="input" label="text input" />
+    {{ input }}
   </div>
 </template>
 
@@ -19,7 +21,8 @@ export default Vue.extend({
   data() {
     return {
       img: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Vue.png',
-      checkbox: 'hello',
+      checkbox: null,
+      input: '',
     };
   },
   methods: {
