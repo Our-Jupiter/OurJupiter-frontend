@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     Home
-    <BaseButton @click="openDialog">Button</BaseButton>
+    <BaseButton @click="openPopup">popup</BaseButton>
+    <BaseButton @click="openConfirm">confirm</BaseButton>
     <BaseCard title="Pot with a plant" :img="img" text="hi this is text" />
     <BaseAvatar :img="img" />
   </div>
@@ -19,8 +20,11 @@ export default Vue.extend({
     };
   },
   methods: {
-    openDialog() {
+    openPopup() {
       this.$popup.open({ component: Login });
+    },
+    openConfirm() {
+      this.$confirm('Really ?');
     },
   },
 });
