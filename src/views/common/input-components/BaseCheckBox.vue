@@ -13,7 +13,7 @@ export default Vue.extend({
     prop: 'modelValue',
   },
   props: {
-    modelValue: { type: Boolean, default: false },
+    modelValue: { default: false },
     label: { type: String, default: '' },
     checkedValue: { type: String, default: 'checked' },
   },
