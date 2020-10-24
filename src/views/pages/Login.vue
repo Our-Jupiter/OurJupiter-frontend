@@ -1,7 +1,7 @@
 <template>
-  <div class="about">
-    <h1>This is login page</h1>
-    <BaseCard title="Pot with a plant" :img="img" text="hi this is text" />
+  <div class="login">
+    <img class="logo" src="@/assets/logo.png" alt="main_logo" />
+    <BaseButton @click="login">Login to 아워목성</BaseButton>
   </div>
 </template>
 
@@ -9,10 +9,27 @@
 import Vue from 'vue';
 
 export default Vue.extend({
-  data() {
-    return {
-      img: 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Vue.png',
-    };
+  name: 'Login',
+  methods: {
+    login() {
+      window.location.href =
+        'https://localhost:8080/oauth2/authorization/google';
+    },
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem;
+
+  .logo {
+    width: 200px;
+    margin: 2rem;
+  }
+}
+</style>
