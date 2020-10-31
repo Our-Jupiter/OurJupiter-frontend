@@ -23,25 +23,24 @@ export default Vue.extend({
     };
   },
   methods: {
-    login() {
+    async login() {
       if (!this.email || !this.password) {
         this.$snackbar.warn('이메일과 비밀번호를 모두 입력해주세요 !');
         return;
       }
 
-      axios
-        .post('http://localhost:8080/login', {
+      try {
+        const data = await axios.post('http://localhost:8080/login', {
           email: this.email,
           password: this.password,
-        })
-        .then(data => {
-          localStorage.setItem('token', data.data);
-          this.$snackbar.success('환영합니다 !');
-          router.push({ path: '/' });
-        })
-        .catch(err => {
-          this.$snackbar.error(err.response.data.message);
         });
+
+        localStorage.setItem('token', data.data);
+        this.$snackbar.success('환영합니다 !');
+        router.push({ path: '/' });
+      } catch (err) {
+        this.$snackbar.error(err.response.data.message);
+      }
     },
   },
 });

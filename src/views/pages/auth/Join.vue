@@ -26,7 +26,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    join() {
+    async join() {
       if (!this.email || !this.name || !this.password) {
         this.$snackbar.warn('이메일과 닉네임, 비밀번호를 모두 입력해주세요 !');
         return;
@@ -36,21 +36,20 @@ export default Vue.extend({
         return;
       }
 
-      axios
-        .post('http://localhost:8080/join', {
+      try {
+        await axios.post('http://localhost:8080/join', {
           email: this.email,
           name: this.name,
           password: this.password,
-        })
-        .then(data => {
-          this.$snackbar.success(
-            '회원가입이 완료되었습니다 !<br/> 로그인 페이지로 이동합니다.'
-          );
-          router.push({ path: '/login' });
-        })
-        .catch(err => {
-          this.$snackbar.error(err.response.data.message);
         });
+
+        this.$snackbar.success(
+          '회원가입이 완료되었습니다 !<br/> 로그인 페이지로 이동합니다.'
+        );
+        router.push({ path: '/login' });
+      } catch (err) {
+        this.$snackbar.error(err.response.data.message);
+      }
     },
   },
 });
