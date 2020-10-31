@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Login from './Login.vue';
+import Login from './auth/Login.vue';
 
 export default Vue.extend({
   name: 'Home',
