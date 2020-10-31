@@ -37,6 +37,7 @@ export default Vue.extend({
 
         localStorage.setItem('token', data.data);
         this.$snackbar.success('환영합니다 !');
+
         router.push({ path: '/' });
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
