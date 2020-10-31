@@ -1,7 +1,8 @@
 import { RouteConfig } from 'vue-router';
 
 import Home from '@/views/pages/Home.vue';
-import Login from '@/views/pages/Login.vue';
+import Login from '@/views/pages/auth/Login.vue';
+import Join from '@/views/pages/auth/Join.vue';
 
 const routes: Array<RouteConfig> = [
   {
@@ -11,6 +12,10 @@ const routes: Array<RouteConfig> = [
   {
     path: '/login',
     component: Login,
+  },
+  {
+    path: '/join',
+    component: Join,
   },
 ];
 

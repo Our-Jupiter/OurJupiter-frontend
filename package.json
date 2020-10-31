@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "material-icons": "^0.3.1",
     "vue": "^2.6.11",
@@ -55,16 +56,11 @@
       "ecmaVersion": 2020
     },
     "rules": {
-      "comma-dangle": [
-        "error",
-        "always-multiline"
-      ],
       "semi": [
         "error",
         "always"
       ],
       "no-extra-semi": "error",
-      "no-trailing-spaces": "error",
       "quotes": [
         "error",
         "single",
