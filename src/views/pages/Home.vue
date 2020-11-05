@@ -9,6 +9,9 @@
     {{ checkbox }}
     <BaseInput v-model="input" label="text input" />
     {{ input }}
+
+
+    
   </div>
 </template>
 
