@@ -8,11 +8,15 @@
         <h5 class="card-title">제목: {{ postData.title }}</h5>
         <h5 class="card-title">작성자: {{ postData.author }}</h5>
         <p class="card-text">
-          <small class="text-muted"
-            ><b>수정 날짜:</b> {{ postData.modifiedDate }}</small
-          >
+          <small class="text-muted">
+            <b>수정 날짜:</b>
+            {{ postData.modifiedDate }}
+          </small>
         </p>
-        <p class="card-text"><b>내용:</b> {{ postData.content }}</p>
+        <p class="card-text">
+          <b>내용:</b>
+          {{ postData.content }}
+        </p>
         <div class="bigPictureWrapper">
           <div class="bigPicture" v-if="postData.fileId">
             <img :src="image" width="50%" height="50%" />
@@ -27,7 +31,7 @@
         </router-link>
       </div>
       <div class="col-auto">
-        <router-link :to="{name: 'update', params: { id: postData.id }}">
+        <router-link :to="{ name: 'update', params: { id: postData.id } }">
           <BaseButton>수정</BaseButton>
         </router-link>
       </div>
@@ -39,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import axios from 'axios';
 import router from '@/router';
 
@@ -65,7 +69,6 @@ export default Vue.extend({
 
         const fileId = data.data.fileId;
         this.image = 'http://localhost:8080/api/v1/posts/file/' + fileId;
-
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }

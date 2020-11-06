@@ -8,10 +8,8 @@
     <BaseCheckBox v-model="checkbox" label="hello" checkedValue="hello" />
     {{ checkbox }}
     <BaseInput v-model="input" label="text input" />
+
     {{ input }}
-
-
-    
   </div>
 </template>
 

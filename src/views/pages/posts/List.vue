@@ -18,7 +18,11 @@
         <tr>
           <td>
             <router-link :to="{ name: 'detail', params: { id: post.id } }">
-            <BaseCard :title="post.title" :img= "image + post.fileId" :text= post.modifiedDate />
+              <BaseCard
+                :title="post.title"
+                :img="image + post.fileId"
+                :text="post.modifiedDate"
+              />
             </router-link>
           </td>
         </tr>
@@ -28,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import axios from 'axios';
 import router from '@/router';
 

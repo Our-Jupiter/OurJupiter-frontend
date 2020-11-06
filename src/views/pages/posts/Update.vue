@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import Vue from 'vue';
 import axios from 'axios';
 import router from '@/router';
 
@@ -78,6 +78,7 @@ export default Vue.extend({
             const form = new FormData(document.getElementById('UploadForm') as HTMLFormElement);
 
             form.append('title', this.title);
+            console.log(this.author);
             form.append('content',this.content);
             form.append('author',this.author);
 
