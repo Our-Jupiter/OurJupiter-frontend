@@ -78,7 +78,6 @@ export default Vue.extend({
             const form = new FormData(document.getElementById('UploadForm') as HTMLFormElement);
 
             form.append('title', this.title);
-            console.log(this.author);
             form.append('content',this.content);
             form.append('author',this.author);
 
