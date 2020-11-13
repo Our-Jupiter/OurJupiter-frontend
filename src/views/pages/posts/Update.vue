@@ -51,14 +51,14 @@ export default Vue.extend({
             try {
             const id = this.$route.params.id;
             const data = await axios.get(
-            'http://localhost:8080/api/v1/posts/' + id
+            'http://localhost:8080/board/' + id
             );
             this.title = data.data.title;
             this.author = data.data.author;
             this.content = data.data.content;
 
             const fileId = data.data.fileId;
-            this.imageData = 'http://localhost:8080/api/v1/posts/file/' + fileId;
+            this.imageData = 'http://localhost:8080/board/file/' + fileId;
         } catch (err) {
             this.$snackbar.error(err.response.data.message);
         }
@@ -87,7 +87,7 @@ export default Vue.extend({
             }
 
             try{
-                const data = await axios.put('http://localhost:8080/api/v1/posts/'+ id, form, {
+                const data = await axios.put('http://localhost:8080/board/'+ id, form, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }

@@ -46,6 +46,8 @@ export default Vue.extend({
         async save() {
             const form = new FormData(document.getElementById('UploadForm') as HTMLFormElement);
 
+            console.log(localStorage.getItem('meInfo'));
+
             form.append('title', this.title);
             form.append('content',this.content);
             form.append('author',this.author);
@@ -56,7 +58,7 @@ export default Vue.extend({
             }
 
             try{
-                const data = await axios.post('http://localhost:8080/api/v1/posts', form, {
+                const data = await axios.post('http://localhost:8080/board', form, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }

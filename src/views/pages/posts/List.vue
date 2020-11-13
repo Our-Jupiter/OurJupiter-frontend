@@ -50,10 +50,10 @@ export default Vue.extend({
   methods: {
     async getData() {
       try {
-        const data = await axios.get('http://localhost:8080/api/v1/posts/');
+        const data = await axios.get('http://localhost:8080/board/');
         this.allData = data.data;
 
-        this.image = 'http://localhost:8080/api/v1/posts/file/';
+        this.image = 'http://localhost:8080/board/file/';
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }

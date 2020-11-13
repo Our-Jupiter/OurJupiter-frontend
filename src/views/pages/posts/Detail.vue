@@ -62,13 +62,11 @@ export default Vue.extend({
     async detail() {
       try {
         const id = this.$route.params.id;
-        const data = await axios.get(
-          'http://localhost:8080/api/v1/posts/' + id
-        );
+        const data = await axios.get('http://localhost:8080/board/' + id);
         this.postData = data.data;
 
         const fileId = data.data.fileId;
-        this.image = 'http://localhost:8080/api/v1/posts/file/' + fileId;
+        this.image = 'http://localhost:8080/board/file/' + fileId;
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }
@@ -76,9 +74,7 @@ export default Vue.extend({
     async deletePost() {
       try {
         const id = this.$route.params.id;
-        const data = await axios.delete(
-          'http://localhost:8080/api/v1/posts/' + id
-        );
+        const data = await axios.delete('http://localhost:8080/board/' + id);
         this.$snackbar.success('글이 삭제되었습니다!');
         router.push({ path: '/' });
       } catch (err) {
