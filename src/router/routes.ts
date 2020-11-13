@@ -3,10 +3,12 @@ import { RouteConfig } from 'vue-router';
 import Home from '@/views/pages/Home.vue';
 import Login from '@/views/pages/auth/Login.vue';
 import Join from '@/views/pages/auth/Join.vue';
+import GroupList from '@/views/pages/group/GroupList.vue';
+import GroupMain from '@/views/pages/group/GroupMain.vue';
 
 const routes: Array<RouteConfig> = [
   {
-    path: '/',
+    path: '/home',
     component: Home,
   },
   {
@@ -16,6 +18,14 @@ const routes: Array<RouteConfig> = [
   {
     path: '/join',
     component: Join,
+  },
+  {
+    path: '/group',
+    component: GroupList,
+  },
+  {
+    path: '/group/:id',
+    component: GroupMain,
   },
 ];
 
