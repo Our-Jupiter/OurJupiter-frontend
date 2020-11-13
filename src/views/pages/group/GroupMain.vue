@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <h2>{{ $route.query.groupName }}</h2>
     <div class="header">
       <div class="avatar">
         <BaseAvatar />

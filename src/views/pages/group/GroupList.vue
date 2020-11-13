@@ -14,7 +14,11 @@
         :title="group.value"
       >
         <template #interaction>
-          <BaseButton color="danger" danger @click="enterGroup(group.key)">
+          <BaseButton
+            color="danger"
+            danger
+            @click="enterGroup(group.key, group.value)"
+          >
             입장
           </BaseButton>
         </template>
@@ -59,8 +63,8 @@ export default Vue.extend({
       localStorage.removeItem('token');
       router.push('/login');
     },
-    enterGroup(id: number) {
-      router.push(`/group/${id}`);
+    enterGroup(groupId: number, groupName: string) {
+      router.push(`/group/${groupId}?groupName=${groupName}`);
     },
     async getGroup() {
       try {
@@ -78,28 +82,28 @@ export default Vue.extend({
         data: { callback: this.getGroup.bind(this) },
       });
     },
-    async updateGroup(id: number) {
-      try {
-        const data = await axios.put(
-          `http://localhost:8080/group/${id}`,
-          {
-            name: 'changed',
-          },
-          { headers: this.headers }
-        );
-      } catch (err) {
-        this.$snackbar.error(err.response.data.message);
-      }
-    },
-    async deleteGroup(id: number) {
-      try {
-        const data = await axios.delete(`http://localhost:8080/group/${id}`, {
-          headers: this.headers,
-        });
-      } catch (err) {
-        this.$snackbar.error(err.response.data.message);
-      }
-    },
+    // async updateGroup(id: number) {
+    //   try {
+    //     const data = await axios.put(
+    //       `http://localhost:8080/group/${id}`,
+    //       {
+    //         name: 'changed',
+    //       },
+    //       { headers: this.headers }
+    //     );
+    //   } catch (err) {
+    //     this.$snackbar.error(err.response.data.message);
+    //   }
+    // },
+    // async deleteGroup(id: number) {
+    //   try {
+    //     const data = await axios.delete(`http://localhost:8080/group/${id}`, {
+    //       headers: this.headers,
+    //     });
+    //   } catch (err) {
+    //     this.$snackbar.error(err.response.data.message);
+    //   }
+    // },
   },
 });
 </script>
