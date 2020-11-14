@@ -4,7 +4,7 @@
       <h3>{{ title }}</h3>
     </template>
     <template #img>
-      <img :src="img" alt="" />
+      <img :src="img" alt />
     </template>
     <template #text>
       <p>{{ text }}</p>
