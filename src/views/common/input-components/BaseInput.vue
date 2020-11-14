@@ -1,5 +1,5 @@
 <template>
-  <vs-input v-model="value" :label="label" :type="type" />
+  <vs-input v-model="value" primary :label-placeholder="label" :type="type" />
 </template>
 
 <script lang="ts">

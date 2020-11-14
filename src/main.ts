@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import './assets/css/style-loader';
 import { PluginInterface } from './plugins/types';
 import Vuesax from 'vuesax';
 import 'vuesax/dist/vuesax.css';

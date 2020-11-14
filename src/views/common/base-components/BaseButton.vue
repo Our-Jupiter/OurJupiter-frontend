@@ -1,7 +1,9 @@
 <template>
-  <vs-button :color="color" @click="clickEvent">
-    <slot></slot>
-  </vs-button>
+  <div>
+    <vs-button :color="color" @click="clickEvent">
+      <slot></slot>
+    </vs-button>
+  </div>
 </template>
 
 <script lang="ts">

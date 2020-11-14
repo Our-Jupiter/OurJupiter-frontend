@@ -10,9 +10,10 @@
       <p>{{ text }}</p>
     </template>
     <template #interactions>
-      <vs-button danger icon @click="clickEvent">
+      <vs-button v-if="favorite" danger icon @click="clickEvent">
         <i class="material-icons">favorite</i>
       </vs-button>
+      <slot name="interaction"></slot>
     </template>
   </vs-card>
 </template>
@@ -25,7 +26,8 @@ export default Vue.extend({
   props: {
     title: { type: String, default: '', required: true },
     text: { type: String, default: '' },
-    img: { type: String, default: '', required: true },
+    img: { type: String, default: require('@/assets/logo.png') },
+    favorite: { type: Boolean, default: false },
   },
   methods: {
     clickEvent(event: Event) {

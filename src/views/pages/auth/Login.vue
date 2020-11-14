@@ -36,9 +36,10 @@ export default Vue.extend({
         });
 
         localStorage.setItem('token', data.data);
+        this.$store.dispatch('me/putMe');
         this.$snackbar.success('환영합니다 !');
 
-        router.push({ path: '/' });
+        router.push({ path: '/group' });
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }

@@ -17,8 +17,8 @@ router.beforeEach((to, from, next) => {
       next('/login');
     }
   } else if (localStorage.getItem('token') !== null && noAuthPaths.includes(path)) {
-    if (to.path !== '/') {
-      next('/');
+    if (to.path !== '/group') {
+      next('/group');
     }
   } else {
     next();
