@@ -4,8 +4,10 @@ import router from './router';
 import store from './store';
 import './assets/css/style-loader';
 import { PluginInterface } from './plugins/types';
-import Vuesax from 'vuesax';
-import 'vuesax/dist/vuesax.css';
+import Vuesax from 'vuesax4';
+import { vsIcon } from 'vuesax3';
+import 'vuesax3/dist/vuesax.css';
+import 'vuesax4/dist/vuesax.min.css';
 import 'material-icons/iconfont/material-icons.css';
 
 class OurJupiter {
@@ -20,6 +22,10 @@ class OurJupiter {
 
   private registerVuesax() {
     Vue.use(Vuesax);
+    const vuesax3Comps = [vsIcon];
+    vuesax3Comps.forEach((comp) => {
+      Vue.use(comp);
+    });
   }
 
   private registerVuePlugins() {
@@ -71,7 +77,6 @@ class OurJupiter {
       render: h => h(App),
     }).$mount('#app');
   }
-
 }
 
 new OurJupiter().bootstrap();
