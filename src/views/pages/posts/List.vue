@@ -38,14 +38,14 @@ import router from '@/router';
 
 export default Vue.extend({
   name: 'List',
-  created() {
-    this.getData();
-  },
   data() {
     return {
       allData: null,
       image: '',
     };
+  },
+  beforeMount() {
+    this.getData();
   },
   methods: {
     async getData() {

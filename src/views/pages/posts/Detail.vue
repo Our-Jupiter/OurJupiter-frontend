@@ -49,14 +49,14 @@ import router from '@/router';
 
 export default Vue.extend({
   name: 'Detail',
-  created() {
-    this.detail();
-  },
   data() {
     return {
       postData: [],
       image: '',
     };
+  },
+  beforeMount() {
+    this.detail();
   },
   methods: {
     async detail() {
