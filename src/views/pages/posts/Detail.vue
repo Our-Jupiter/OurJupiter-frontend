@@ -26,7 +26,7 @@
     </div>
     <div class="col-auto">
       <div class="col-auto">
-        <BaseButton @click="enterFeed($route.params.groupId)">
+        <BaseButton @click="backToFeed($route.params.groupId)">
           목록으로 돌아가기
         </BaseButton>
       </div>
@@ -68,7 +68,7 @@ export default Vue.extend({
         params: { id: postId, groupId: this.$route.params.groupId },
       });
     },
-    enterFeed(groupId: number) {
+    backToFeed(groupId: number) {
       router.push({ path: `/list/${groupId}` });
     },
     async detail() {
