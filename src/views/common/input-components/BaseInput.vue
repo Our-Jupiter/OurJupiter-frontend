@@ -1,5 +1,12 @@
 <template>
-  <vs-input v-model="value" primary :label-placeholder="label" :type="type" />
+  <vs-input
+    v-model="value"
+    :label="label"
+    :type="type"
+    :placeholder="placeholder"
+    :disabled="disabled"
+    :value="textValue"
+  />
 </template>
 
 <script lang="ts">
@@ -14,6 +21,9 @@ export default Vue.extend({
     modelValue: { type: String, default: '' },
     label: { type: String, default: '' },
     type: { type: String, default: 'text' },
+    placeholder: { type: String, default: '' },
+    disabled: { type: Boolean, default: false },
+    textValue: { type: String, default: '' },
   },
   computed: {
     value: {

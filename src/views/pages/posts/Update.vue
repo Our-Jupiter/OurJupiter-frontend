@@ -6,7 +6,7 @@
           <BaseInput v-model= "title" type="text" class="form-control" id="title" label="제목"></BaseInput>
         </div>
         <div class="form-group">
-          <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자">postData.author</BaseInput>
+          <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자" disabled>postData.author</BaseInput>
         </div>
         <div class="form-group">
           <textarea v-model= "content" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
@@ -16,7 +16,7 @@
             <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
             <input name="file" type="file" class="custom-file-input" id="customFile" ref="file" @change="previewImage">
           </div>
-          <div class="image-preview" v-if="imageData.length > 0">
+          <div class="image-preview" v-if="imageData">
             <img class="preview" :src="imageData" width="50%" height="50%">
           </div>
         </div>
@@ -41,6 +41,7 @@ export default Vue.extend({
       title: '',
       author: '',
       content: '',
+      fileId:'',
     };
   },
   beforeMount() {
@@ -54,9 +55,12 @@ export default Vue.extend({
         this.title = data.data.title;
         this.author = data.data.author;
         this.content = data.data.content;
+        this.fileId = data.data.fileId;
 
         const fileId = data.data.fileId;
-        this.imageData = 'http://localhost:8080/board/file/' + fileId;
+        if (fileId) {
+          this.imageData = 'http://localhost:8080/board/file/' + fileId;
+        }
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }
@@ -79,10 +83,10 @@ export default Vue.extend({
 
       form.append('title', this.title);
       form.append('content', this.content);
-      form.append('author', this.author);
+      form.append('author', this.$store.state.me.me.name);
 
-      if (!this.title || !this.author) {
-        this.$snackbar.warn('제목과 작성자를 모두 입력해주세요');
+      if (!this.title) {
+        this.$snackbar.warn('제목을 입력해주세요');
         return;
       }
 
@@ -93,7 +97,9 @@ export default Vue.extend({
           },
         });
         this.$snackbar.success('글이 수정되었습니다!');
-        router.push({ path: '/detail/' + id });
+        router.push({ name: 'detail',
+        params: { id: id, groupId: this.$route.params.groupId },
+        });
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }

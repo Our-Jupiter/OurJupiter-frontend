@@ -7,7 +7,7 @@
         <h2 class="name">{{ me.name }}</h2>
       </div>
       <div class="button">
-        <BaseButton @click="enterFeed">그룹 피드</BaseButton>
+        <BaseButton @click="enterFeed($route.params.id)">그룹 피드</BaseButton>
         <BaseButton>인증 현황</BaseButton>
         <BaseButton>인증하기</BaseButton>
       </div>
@@ -20,6 +20,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import router from '@/router';
 
 export default Vue.extend({
   name: 'GroupMain',
@@ -29,8 +30,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    enterFeed() {
-      console.log('entered');
+    enterFeed(groupId: number) {
+      router.push({ path: `/list/${groupId}` });
     },
   },
 });

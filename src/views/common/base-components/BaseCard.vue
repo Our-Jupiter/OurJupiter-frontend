@@ -7,7 +7,7 @@
       <img :src="img" alt />
     </template>
     <template #text>
-      <p>{{ text }}</p>
+      <p>{{ author }}</p>
     </template>
     <template #interactions>
       <vs-button v-if="favorite" danger icon @click="clickEvent">
@@ -25,7 +25,7 @@ export default Vue.extend({
   name: 'BaseCard',
   props: {
     title: { type: String, default: '', required: true },
-    text: { type: String, default: '' },
+    author: { type: String, default: '' },
     img: { type: String, default: require('@/assets/logo.png') },
     favorite: { type: Boolean, default: false },
   },

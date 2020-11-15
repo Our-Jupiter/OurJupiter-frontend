@@ -2,32 +2,33 @@
   <div class="list">
     <div class="row">
       <div class="col-md-6">
-        <router-link to="/save" style="color: rgb(25, 91, 255)">
+        <router-link
+          :to="{ name: 'save', params: { id: $route.params.id } }"
+          style="color: rgb(25, 91, 255)"
+        >
           글 등록하러 가기
         </router-link>
       </div>
     </div>
     <br />
-    <table class="table table-horizontal table-bordered">
-      <thead class="thead-strong">
-        <tr>
-          <th>피드</th>
-        </tr>
-      </thead>
-      <tbody id="tbody" v-for="post in allData" :key="post.id">
-        <tr>
-          <td>
-            <router-link :to="{ name: 'detail', params: { id: post.id } }">
-              <BaseCard
-                :title="post.title"
-                :img="image + post.fileId"
-                :text="post.modifiedDate"
-              />
-            </router-link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <ul class="postList">
+      <li v-for="post in reverseList" :key="post.id">
+        <router-link
+          :to="{
+            name: 'detail',
+            params: { id: post.id, groupId: $route.params.id },
+          }"
+        >
+          <BaseCard
+            v-if="post.fileId"
+            :title="post.title"
+            :img="image + post.fileId"
+            :author="post.author"
+          />
+          <BaseCard v-else :title="post.title" :author="post.author" />
+        </router-link>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -38,19 +39,27 @@ import router from '@/router';
 
 export default Vue.extend({
   name: 'List',
-  data() {
-    return {
-      allData: null,
-      image: '',
-    };
-  },
   beforeMount() {
     this.getData();
   },
+  data() {
+    return {
+      allData: [],
+      image: '',
+    };
+  },
+  computed: {
+    reverseList(): any {
+      return this.allData.slice().reverse();
+    },
+  },
+
   methods: {
     async getData() {
       try {
-        const data = await axios.get('http://localhost:8080/board/');
+        const data = await axios.get('http://localhost:8080/board/', {
+          params: { groupId: this.$route.params.id },
+        });
         this.allData = data.data;
 
         this.image = 'http://localhost:8080/board/file/';
@@ -68,5 +77,8 @@ export default Vue.extend({
   justify-content: center;
   align-items: center;
   padding: 5rem;
+}
+.postList {
+  list-style: none;
 }
 </style>

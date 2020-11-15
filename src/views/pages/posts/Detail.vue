@@ -26,16 +26,14 @@
     </div>
     <div class="col-auto">
       <div class="col-auto">
-        <router-link to="/">
-          <BaseButton>홈으로 돌아가기</BaseButton>
-        </router-link>
+        <BaseButton @click="enterFeed($route.params.groupId)">
+          목록으로 돌아가기
+        </BaseButton>
       </div>
-      <div class="col-auto">
-        <router-link :to="{ name: 'update', params: { id: postData.id } }">
-          <BaseButton>수정</BaseButton>
-        </router-link>
+      <div class="col-auto" v-if="me.name == postData.author">
+        <BaseButton @click="enterUpdate(postData.id)">수정</BaseButton>
       </div>
-      <div class="col-auto">
+      <div class="col-auto" v-if="me.name == postData.author">
         <BaseButton @click="deletePost">삭제</BaseButton>
       </div>
     </div>
@@ -49,16 +47,30 @@ import router from '@/router';
 
 export default Vue.extend({
   name: 'Detail',
+  beforeMount() {
+    this.detail();
+  },
+  computed: {
+    me(): object {
+      return this.$store.state.me.me;
+    },
+  },
   data() {
     return {
       postData: [],
       image: '',
     };
   },
-  beforeMount() {
-    this.detail();
-  },
   methods: {
+    enterUpdate(postId: string) {
+      router.push({
+        name: 'update',
+        params: { id: postId, groupId: this.$route.params.groupId },
+      });
+    },
+    enterFeed(groupId: number) {
+      router.push({ path: `/list/${groupId}` });
+    },
     async detail() {
       try {
         const id = this.$route.params.id;
@@ -73,10 +85,11 @@ export default Vue.extend({
     },
     async deletePost() {
       try {
+        const groupId = this.$route.params.groupId;
         const id = this.$route.params.id;
         const data = await axios.delete('http://localhost:8080/board/' + id);
         this.$snackbar.success('글이 삭제되었습니다!');
-        router.push({ path: '/' });
+        router.push({ path: `/list/${groupId}` });
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }

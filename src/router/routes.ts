@@ -10,7 +10,6 @@ import Detail from '@/views/pages/posts/Detail.vue';
 import Update from '@/views/pages/posts/Update.vue';
 import List from '@/views/pages/posts/List.vue';
 
-
 const routes: Array<RouteConfig> = [
   {
     path: '/home',
@@ -34,6 +33,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/save',
+    name: 'save',
     component: Save,
   },
   {
@@ -47,9 +47,9 @@ const routes: Array<RouteConfig> = [
     component: Update,
   },
   {
-    path: '/list',
+    path: '/list/:id',
     component: List,
-  }
+  },
 ];
 
 export const routeMethod = {

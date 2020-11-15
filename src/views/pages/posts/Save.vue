@@ -6,7 +6,7 @@
           <BaseInput v-model= "title" type="text" class="form-control" id="title" label="제목"/>
         </div>
         <div class="form-group">
-          <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자" />
+          <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자" :placeholder="$store.state.me.me.name" disabled />
         </div>
         <div class="form-group">
           <textarea v-model= "content" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
@@ -39,6 +39,7 @@ export default Vue.extend({
       title: '',
       author: '',
       content: '',
+      groupId:'',
       imageData: '',
     };
   },
@@ -50,10 +51,11 @@ export default Vue.extend({
 
       form.append('title', this.title);
       form.append('content', this.content);
-      form.append('author', this.author);
+      form.append('author',this.$store.state.me.me.name);
+      form.append('groupId', this.$route.params.id);
 
-      if (!this.title || !this.author) {
-        this.$snackbar.warn('제목과 작성자를 모두 입력해주세요');
+      if (!this.title) {
+        this.$snackbar.warn('제목을 모두 입력해주세요');
         return;
       }
 
@@ -64,7 +66,7 @@ export default Vue.extend({
           },
         });
         this.$snackbar.success('글이 등록되었습니다!');
-        router.push({ path: '/' });
+        router.push({ path: `/list/${this.$route.params.id}` });
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }
