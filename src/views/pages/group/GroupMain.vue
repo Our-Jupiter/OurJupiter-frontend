@@ -5,7 +5,7 @@
       <BaseButton @click="manageGroup">
         <BaseIcon>settings</BaseIcon>
       </BaseButton>
-      <BaseButton>이메일로 초대하기</BaseButton>
+      <BaseButton @click="inviteGroup">이메일로 초대하기</BaseButton>
     </div>
     <div class="header">
       <div class="avatar">
@@ -28,6 +28,7 @@
 import Vue from 'vue';
 import router from '@/router';
 import GroupSetting from './GroupSetting.vue';
+import GroupInvite from './GroupInvite.vue';
 
 export default Vue.extend({
   name: 'GroupMain',
@@ -43,6 +44,11 @@ export default Vue.extend({
     manageGroup() {
       this.$popup.open({
         component: GroupSetting,
+      });
+    },
+    inviteGroup() {
+      this.$popup.open({
+        component: GroupInvite,
       });
     },
   },
