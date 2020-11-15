@@ -7,6 +7,11 @@
       </div>
     </div>
     <div class="groupList">
+      <BaseCard class="group" title="+">
+        <template #interaction>
+          <BaseButton @click="createGroup">추가</BaseButton>
+        </template>
+      </BaseCard>
       <BaseCard
         class="group"
         v-for="(group, index) in groupList"
@@ -21,11 +26,6 @@
           >
             입장
           </BaseButton>
-        </template>
-      </BaseCard>
-      <BaseCard class="group" title="+">
-        <template #interaction>
-          <BaseButton @click="createGroup">추가</BaseButton>
         </template>
       </BaseCard>
     </div>
@@ -82,34 +82,14 @@ export default Vue.extend({
         data: { callback: this.getGroup.bind(this) },
       });
     },
-    // async updateGroup(id: number) {
-    //   try {
-    //     const data = await axios.put(
-    //       `http://localhost:8080/group/${id}`,
-    //       {
-    //         name: 'changed',
-    //       },
-    //       { headers: this.headers }
-    //     );
-    //   } catch (err) {
-    //     this.$snackbar.error(err.response.data.message);
-    //   }
-    // },
-    // async deleteGroup(id: number) {
-    //   try {
-    //     const data = await axios.delete(`http://localhost:8080/group/${id}`, {
-    //       headers: this.headers,
-    //     });
-    //   } catch (err) {
-    //     this.$snackbar.error(err.response.data.message);
-    //   }
-    // },
   },
 });
 </script>
 
 <style lang="scss" scoped>
 .wrapper {
+  height: 100%;
+  min-height: 100%;
   background-color: rgba(30, 32, 35, 1);
   margin: 0;
 

@@ -30,10 +30,10 @@
           목록으로 돌아가기
         </BaseButton>
       </div>
-      <div class="col-auto" v-if="me.name == postData.author">
+      <div class="col-auto" v-if="me.name === postData.author">
         <BaseButton @click="enterUpdate(postData.id)">수정</BaseButton>
       </div>
-      <div class="col-auto" v-if="me.name == postData.author">
+      <div class="col-auto" v-if="me.name === postData.author">
         <BaseButton @click="deletePost">삭제</BaseButton>
       </div>
     </div>
@@ -87,7 +87,7 @@ export default Vue.extend({
       try {
         const groupId = this.$route.params.groupId;
         const id = this.$route.params.id;
-        const data = await axios.delete('http://localhost:8080/board/' + id);
+        await axios.delete('http://localhost:8080/board/' + id);
         this.$snackbar.success('글이 삭제되었습니다!');
         router.push({ path: `/list/${groupId}` });
       } catch (err) {

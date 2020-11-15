@@ -53,7 +53,6 @@ export default Vue.extend({
       return this.allData.slice().reverse();
     },
   },
-
   methods: {
     async getData() {
       try {
