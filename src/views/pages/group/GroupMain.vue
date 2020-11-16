@@ -5,9 +5,9 @@
       <BaseButton @click="manageGroup">
         <BaseIcon>settings</BaseIcon>
       </BaseButton>
-      <BaseButton v-if="me.email === ownerEmail" @click="inviteGroup"
-        >이메일로 초대하기</BaseButton
-      >
+      <BaseButton v-if="me.email === ownerEmail" @click="inviteGroup">
+        이메일로 초대하기
+      </BaseButton>
     </div>
     <div class="header">
       <div class="avatar">
@@ -40,6 +40,9 @@ export default Vue.extend({
       ownerEmail: '',
     };
   },
+  beforeMount() {
+    this.getGroupOwnerEmail();
+  },
   computed: {
     headers(): object {
       const token = localStorage.getItem('token');
@@ -49,16 +52,10 @@ export default Vue.extend({
       return this.$store.state.me.me;
     },
   },
-  beforeMount() {
-    this.getGroupInformation();
-  },
   methods: {
-    async getGroupInformation() {
+    async getGroupOwnerEmail() {
       const data = await axios.get(
-        'http://localhost:8080/group/' + this.$route.params.id,
-        {
-          headers: this.headers,
-        }
+        'http://localhost:8080/group/' + this.$route.params.id
       );
       this.ownerEmail = data.data;
     },

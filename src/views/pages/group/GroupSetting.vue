@@ -33,6 +33,10 @@ export default Vue.extend({
   methods: {
     async updateGroup(id: number) {
       try {
+        if (!this.name) {
+          this.$snackbar.warn('그룹이름은 빈값으로 수정 불가능합니다 !');
+          return;
+        }
         const data = await axios.put(
           `http://localhost:8080/group/${id}`,
           { name: this.name },
