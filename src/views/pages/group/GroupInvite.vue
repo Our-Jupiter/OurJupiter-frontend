@@ -25,12 +25,6 @@ export default Vue.extend({
   methods: {
     async sendEmail() {
       try {
-        /*const form = new FormData(
-          document.getElementById('SendEmailForm') as HTMLFormElement
-        );
-        form.append('email', this.email);
-        form.append('groupName', this.$route.query.groupName);
-        form.append('groupId', this.groupId);*/
         if (!this.email) {
           this.$snackbar.warn('이메일을 입력해주세요');
           return;
@@ -41,9 +35,6 @@ export default Vue.extend({
           email: this.email,
         });
         this.$popup.close();
-        router.push(
-          `/group/${this.$route.params.id}?groupName=${this.$route.query.groupName}`
-        );
         this.$snackbar.success(
           this.email + '로 그룹 초대 메일이 전송되었습니다'
         );

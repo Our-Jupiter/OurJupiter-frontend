@@ -52,6 +52,7 @@ export default Vue.extend({
       form.append('title', this.title);
       form.append('content', this.content);
       form.append('author',this.$store.state.me.me.name);
+      form.append('authorEmail',this.$store.state.me.me.email);
       form.append('groupId', this.$route.params.id);
 
       if (!this.title) {

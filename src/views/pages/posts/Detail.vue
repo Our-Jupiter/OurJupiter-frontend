@@ -30,10 +30,10 @@
           목록으로 돌아가기
         </BaseButton>
       </div>
-      <div class="col-auto" v-if="me.name === postData.author">
+      <div class="col-auto" v-if="me.email === postData.authorEmail">
         <BaseButton @click="enterUpdate(postData.id)">수정</BaseButton>
       </div>
-      <div class="col-auto" v-if="me.name === postData.author">
+      <div class="col-auto" v-if="me.email === postData.authorEmail">
         <BaseButton @click="deletePost">삭제</BaseButton>
       </div>
     </div>
