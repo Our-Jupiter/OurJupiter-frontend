@@ -2,7 +2,7 @@
   <div class="main">
     <h2>{{ $route.query.groupName }}</h2>
     <div class="manage">
-      <BaseButton @click="manageGroup">
+      <BaseButton v-if="me.email === ownerEmail" @click="manageGroup">
         <BaseIcon>settings</BaseIcon>
       </BaseButton>
       <BaseButton v-if="me.email === ownerEmail" @click="inviteGroup">

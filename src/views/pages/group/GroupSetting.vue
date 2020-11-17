@@ -4,7 +4,7 @@
     <div class="button">
       <BaseButton @click="updateGroup(groupId)">이름 수정하기</BaseButton>
       <BaseButton color="danger" @click="deleteGroup(groupId)">
-        삭제하기
+        그룹 삭제하기
       </BaseButton>
     </div>
   </div>
