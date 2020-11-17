@@ -2,30 +2,32 @@
   <div class="list">
     <div class="row">
       <div class="col-md-6">
+        <h2>그룹 피드</h2>
+        <br />
         <BaseButton @click="savePost($route.params.id)">
           글 등록
         </BaseButton>
       </div>
+      <br />
+      <ul class="postList">
+        <li v-for="post in reverseList" :key="post.id" class="post">
+          <router-link
+            :to="{
+              name: 'detail',
+              params: { id: post.id, groupId: $route.params.id },
+            }"
+          >
+            <BaseCard
+              v-if="post.fileId"
+              :title="post.title"
+              :img="image + post.fileId"
+              :author="post.author"
+            />
+            <BaseCard v-else :title="post.title" :author="post.author" />
+          </router-link>
+        </li>
+      </ul>
     </div>
-    <br />
-    <ul class="postList">
-      <li v-for="post in reverseList" :key="post.id" class="post">
-        <router-link
-          :to="{
-            name: 'detail',
-            params: { id: post.id, groupId: $route.params.id },
-          }"
-        >
-          <BaseCard
-            v-if="post.fileId"
-            :title="post.title"
-            :img="image + post.fileId"
-            :author="post.author"
-          />
-          <BaseCard v-else :title="post.title" :author="post.author" />
-        </router-link>
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -58,6 +60,10 @@ export default Vue.extend({
         });
         this.allData = data.data;
 
+        if (this.allData.length == 0) {
+          this.$snackbar.info('아직 피드에 글이 없습니다! 한 번 작성해보세요!');
+        }
+
         this.image = 'http://localhost:8080/board/file/';
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
@@ -76,11 +82,12 @@ export default Vue.extend({
   justify-content: center;
   align-items: center;
   padding: 5rem;
-}
-.postList {
-  list-style: none;
-}
-.post {
-  padding: 1rem;
+
+  .postList {
+    list-style: none;
+  }
+  .post {
+    padding: 1rem;
+  }
 }
 </style>
