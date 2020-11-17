@@ -1,6 +1,6 @@
 <template>
   <div class="update">
-    <div class="col-md-4">
+    <div class="form">
       <form id="UploadForm" enctype=”multipart/form-data” name="upload">
         <div class="form-group">
           <BaseInput v-model= "title" type="text" class="form-control" id="title" label="제목"></BaseInput>
@@ -9,8 +9,9 @@
           <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자" disabled>postData.author</BaseInput>
         </div>
         <div class="form-group">
+          <label>내용: </label>
           <textarea v-model= "content" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
-        </div>
+        </div><br>
         <div class="form-group">
           <div class="custom-file" id="inputFile">
             <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
@@ -21,8 +22,10 @@
           </div>
         </div>
       </form>
-      <a href="/" role="button" class="btn btn-secondary">취소</a>
+      <div class="button">
+      <BaseButton @click="back">취소</BaseButton>
       <BaseButton @click="update">등록</BaseButton>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +51,9 @@ export default Vue.extend({
     this.getData();
   },
   methods: {
+    back() {
+      router.push({ name: 'detail', params: { id: this.$route.params.id, groupId: this.$route.params.groupId } });
+    },
     async getData() {
       try {
         const id = this.$route.params.id;
@@ -115,5 +121,31 @@ export default Vue.extend({
   justify-content: center;
   align-items: center;
   padding: 5rem;
+
+  .image-preview {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .button {
+    display: flex;
+    margin: 2rem 3rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 760px) {
+  .form {
+      display: grid;
+      grid-template-columns: 80%;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+    }
+  .button {
+    display: flex;
+    margin: 1rem 3rem;
+  }
+}
 }
 </style>

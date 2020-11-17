@@ -1,30 +1,26 @@
 <template>
-  <div class="container">
-    <div class="card">
-      <div class="card-body">
-        <div class="hidden" style="display:none">
-          <input type="text" class="form-control" id="id" readonly />
-        </div>
-        <h5 class="card-title">제목: {{ postData.title }}</h5>
-        <h5 class="card-title">작성자: {{ postData.author }}</h5>
-        <p class="card-text">
-          <small class="text-muted">
-            <b>수정 날짜:</b>
-            {{ postData.modifiedDate }}
-          </small>
-        </p>
-        <p class="card-text">
-          <b>내용:</b>
-          {{ postData.content }}
-        </p>
-        <div class="bigPictureWrapper">
-          <div class="bigPicture" v-if="postData.fileId">
-            <img :src="image" width="50%" height="50%" />
-          </div>
-        </div>
+  <div class="main">
+    <div class="content">
+      <div class="hidden" style="display:none">
+        <input type="text" class="form-control" id="id" readonly />
+      </div>
+      <h5 class="card-title">제목: {{ postData.title }}</h5>
+      <h5 class="card-title">작성자: {{ postData.author }}</h5>
+      <p class="card-text">
+        <small class="text-muted">
+          <b>수정 날짜:</b>
+          {{ postData.modifiedDate }}
+        </small>
+      </p>
+      <p class="card-text">
+        <b>내용:</b>
+        {{ postData.content }}
+      </p>
+      <div class="picture" v-if="postData.fileId">
+        <img :src="image" style="width: 80%" />
       </div>
     </div>
-    <div class="col-auto">
+    <div class="button">
       <div class="col-auto">
         <BaseButton @click="backToFeed($route.params.groupId)">
           목록으로 돌아가기
@@ -99,11 +95,40 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.container {
+.main {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 5rem;
+
+  .content {
+    padding: 1rem;
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 5rem;
+    border: 2px solid;
+
+    .picture {
+      width: 100%;
+      height: auto;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .button {
+    display: flex;
+  }
+}
+
+@media (max-width: 760px) {
+  .button {
+    display: flex;
+    margin: 2rem 3rem;
+  }
 }
 </style>

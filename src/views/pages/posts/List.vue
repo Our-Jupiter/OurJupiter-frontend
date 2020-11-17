@@ -2,17 +2,14 @@
   <div class="list">
     <div class="row">
       <div class="col-md-6">
-        <router-link
-          :to="{ name: 'save', params: { id: $route.params.id } }"
-          style="color: rgb(25, 91, 255)"
-        >
-          글 등록하러 가기
-        </router-link>
+        <BaseButton @click="savePost($route.params.id)">
+          글 등록
+        </BaseButton>
       </div>
     </div>
     <br />
     <ul class="postList">
-      <li v-for="post in reverseList" :key="post.id">
+      <li v-for="post in reverseList" :key="post.id" class="post">
         <router-link
           :to="{
             name: 'detail',
@@ -66,6 +63,9 @@ export default Vue.extend({
         this.$snackbar.error(err.response.data.message);
       }
     },
+    savePost() {
+      router.push({ name: 'save', params: { id: this.$route.params.id } });
+    },
   },
 });
 </script>
@@ -79,5 +79,8 @@ export default Vue.extend({
 }
 .postList {
   list-style: none;
+}
+.post {
+  padding: 1rem;
 }
 </style>

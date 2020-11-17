@@ -1,6 +1,6 @@
 <template>
   <div class="save">
-    <div class="col-md-4">
+    <div class="form">
       <form id="UploadForm" enctype=”multipart/form-data” name="upload">
         <div class="form-group">
           <BaseInput v-model= "title" type="text" class="form-control" id="title" label="제목"/>
@@ -8,12 +8,15 @@
         <div class="form-group">
           <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자" :placeholder="$store.state.me.me.name" disabled />
         </div>
+        <br>
         <div class="form-group">
+          <label>내용: </label>
           <textarea v-model= "content" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
         </div>
+        <br>
         <div class="form-group">
           <div class="custom-file" id="inputFile">
-            <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
+            <label class="custom-file-label" for="customFile">파일을 선택해 주세요. </label>
             <input name="file" type="file" class="custom-file-input" id="customFile" ref="file" @change="previewImage">
           </div>
           <div class="image-preview" v-if="imageData.length > 0">
@@ -21,9 +24,12 @@
           </div>
         </div>
       </form>
-      <a href="/" role="button" class="btn btn-secondary">취소</a>
-      <BaseButton @click="save">등록</BaseButton>
-    </div>
+      </div>
+      <div class="button">
+        <BaseButton @click="back()">취소</BaseButton>
+        <BaseButton @click="save">등록</BaseButton>
+      </div>
+    
   </div>
 </template>
 
@@ -44,6 +50,9 @@ export default Vue.extend({
     };
   },
   methods: {
+    back() {
+      router.push({ name: 'list', params: { id: this.$route.params.id } });
+    },
     async save() {
       const form = new FormData(
         document.getElementById('UploadForm') as HTMLFormElement
@@ -93,5 +102,31 @@ export default Vue.extend({
   justify-content: center;
   align-items: center;
   padding: 5rem;
+
+  .image-preview {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .button {
+    display: flex;
+    margin: 2rem 3rem;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 760px) {
+  .form {
+      display: grid;
+      grid-template-columns: 80%;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+    }
+  .button {
+    display: flex;
+    margin: 1rem 3rem;
+  }
 }
 </style>

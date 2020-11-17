@@ -49,6 +49,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/list/:id',
     component: List,
+    name: 'list',
   },
 ];
 
