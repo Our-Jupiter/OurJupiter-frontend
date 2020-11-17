@@ -5,6 +5,7 @@ import Login from '@/views/pages/auth/Login.vue';
 import Join from '@/views/pages/auth/Join.vue';
 import GroupList from '@/views/pages/group/GroupList.vue';
 import GroupMain from '@/views/pages/group/GroupMain.vue';
+import GroupJoin from '@/views/pages/group/GroupJoin.vue';
 import Save from '@/views/pages/posts/Save.vue';
 import Detail from '@/views/pages/posts/Detail.vue';
 import Update from '@/views/pages/posts/Update.vue';
@@ -30,6 +31,10 @@ const routes: Array<RouteConfig> = [
   {
     path: '/group/:id',
     component: GroupMain,
+  },
+  {
+    path: '/invite/:userId/:groupId',
+    component: GroupJoin,
   },
   {
     path: '/save',
