@@ -63,6 +63,7 @@ export default Vue.extend({
   beforeMount() {
     this.getGroupOwnerEmail();
     this.getRoutineInfo();
+    console.log(new Date());
   },
   computed: {
     headers(): object {

@@ -24,7 +24,7 @@
       </div>
       <div class="button">
         <BaseButton @click="back()">취소</BaseButton>
-        <!--<BaseButton @click="createCertification">등록</BaseButton>-->
+        <BaseButton @click="createCertification">등록</BaseButton>
       </div>
   </div>
 </template>
@@ -56,6 +56,26 @@ export default Vue.extend({
   methods: {
       back() {
       router.push({ name: 'groupMain', params: { id: this.$route.params.groupId}, query: {groupName: this.$route.query.groupName} });
+    },
+    async createCertification() {
+      const form = new FormData(
+        document.getElementById('CertificationForm') as HTMLFormElement
+      );
+      form.append('todayDate',this.today);
+      form.append('groupId',this.$route.params.groupId);
+      form.append('userId',this.$store.state.me.me.name);
+
+      try {
+        const data = await axios.post('http://localhost:8080/certification', form, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+        });
+        this.$snackbar.success('오늘 인증을 완료하였습니다!');
+        router.push({ name: 'groupMain', params: { id: this.$route.params.groupId}, query: {groupName: this.$route.query.groupName} });
+      } catch (err) {
+        this.$snackbar.error(err.response.data.message);
+      }
     },
       previewImage: function(event: Event) {
       const input = event.target as HTMLInputElement;
