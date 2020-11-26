@@ -17,7 +17,7 @@
       <div class="button">
         <BaseButton @click="enterFeed($route.params.id)">그룹 피드</BaseButton>
         <BaseButton>인증 현황</BaseButton>
-        <BaseButton>인증하기</BaseButton>
+        <BaseButton @click="enterCertification">인증하기</BaseButton>
       </div>
     </div>
     <div class="content">
@@ -61,6 +61,17 @@ export default Vue.extend({
     },
     enterFeed(groupId: number) {
       router.push({ path: `/list/${groupId}` });
+    },
+    enterCertification() {
+      router.push({
+        name: 'certificationCreate',
+        params: {
+          groupId: this.$route.params.id,
+        },
+        query: {
+          groupName: this.$route.query.groupName,
+        },
+      });
     },
     manageGroup() {
       this.$popup.open({
