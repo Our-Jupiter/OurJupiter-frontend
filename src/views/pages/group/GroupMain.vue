@@ -2,6 +2,18 @@
   <div class="main">
     <h2>{{ $route.query.groupName }}</h2>
     <div class="manage">
+      <BaseButton
+        v-if="me.email === ownerEmail && !activeRoutineStartDate"
+        @click="createRoutine"
+      >
+        루틴 생성하기
+      </BaseButton>
+      <BaseButton v-if="activeRoutineStartDate" color="success">
+        루틴 진행 중
+      </BaseButton>
+      <BaseButton v-if="!activeRoutineStartDate" color="warn">
+        루틴 미진행 중
+      </BaseButton>
       <BaseButton v-if="me.email === ownerEmail" @click="manageGroup">
         <BaseIcon>settings</BaseIcon>
       </BaseButton>
@@ -21,7 +33,11 @@
       </div>
     </div>
     <div class="content">
-      <h2>이번달 목표는 ' ' 입니다</h2>
+      <div v-if="!goal">
+        이번 루틴 목표를 아직 입력하지 않았어요!
+        <BaseButton @click="setGoalPenalty">목표 입력하기</BaseButton>
+      </div>
+      <h2 v-else>이번 루틴 목표는 {{ goal }} 입니다</h2>
     </div>
   </div>
 </template>
@@ -32,16 +48,21 @@ import axios from 'axios';
 import router from '@/router';
 import GroupSetting from './GroupSetting.vue';
 import GroupInvite from './GroupInvite.vue';
+import GoalSet from '@/views/pages/goal/GoalSet.vue';
 
 export default Vue.extend({
   name: 'GroupMain',
   data() {
     return {
       ownerEmail: '',
+      goal: '',
+      penalty: '',
+      activeRoutineStartDate: '',
     };
   },
   beforeMount() {
     this.getGroupOwnerEmail();
+    this.getRoutineInfo();
   },
   computed: {
     headers(): object {
@@ -50,6 +71,13 @@ export default Vue.extend({
     },
     me(): object {
       return this.$store.state.me.me;
+    },
+  },
+  watch: {
+    activeRoutineStartDate(newValue: string) {
+      if (this.activeRoutineStartDate) {
+        this.getGoalPenalty();
+      }
     },
   },
   methods: {
@@ -70,6 +98,40 @@ export default Vue.extend({
     inviteGroup() {
       this.$popup.open({
         component: GroupInvite,
+      });
+    },
+    async getRoutineInfo() {
+      const data = await axios.get(
+        `http://localhost:8080/routine/${this.$route.params.id}`
+      );
+      this.activeRoutineStartDate = data.data;
+    },
+    async createRoutine() {
+      await axios.post(
+        'http://localhost:8080/routine/',
+        { groupId: this.$route.params.id, startDate: new Date() },
+        { headers: this.headers }
+      );
+    },
+    async getGoalPenalty() {
+      try {
+        const data = await axios.get(
+          `http://localhost:8080/goal/${this.$route.params.id}`,
+          { headers: this.headers }
+        );
+        this.goal = data.data.goal;
+        this.penalty = data.data.penalty;
+      } catch (err) {
+        this.$snackbar.error(err.response.data.message);
+      }
+    },
+    setGoalPenalty() {
+      this.$popup.open({
+        component: GoalSet,
+        data: {
+          groupId: this.$route.params.id,
+          callback: this.getGoalPenalty.bind(this),
+        },
       });
     },
   },
