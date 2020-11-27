@@ -44,8 +44,8 @@ export default Vue.extend({
       imageData: '',
     };
   },
-  beforeMount() {
-    this.today = new Date().toLocaleDateString();
+  beforeMount() { 
+    this.today = this.getFormatDate(new Date());
   },
   computed: {
     headers(): object {
@@ -54,19 +54,27 @@ export default Vue.extend({
     },
   },
   methods: {
-      back() {
+    getFormatDate(date:any){
+    const year = date.getFullYear();              //yyyy
+    let month = (1 + date.getMonth());          //M
+    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    let day = date.getDate();                   //d
+    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    return  year + '-' + month + '-' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+    },
+    back() {
       router.push({ name: 'groupMain', params: { id: this.$route.params.groupId}, query: {groupName: this.$route.query.groupName} });
     },
     async createCertification() {
       const form = new FormData(
         document.getElementById('CertificationForm') as HTMLFormElement
       );
-      form.append('todayDate',this.today);
       form.append('groupId',this.$route.params.groupId);
-      form.append('userId',this.$store.state.me.me.name);
-
+      form.append('userId',this.$store.state.me.me.id);
+      form.append('todayDate',this.today);
       try {
-        const data = await axios.post('http://localhost:8080/certification', form, {
+        const data = await axios.post('http://localhost:8080/certification', form,
+        {
           headers: {
             'Content-Type': 'multipart/form-data'
           },

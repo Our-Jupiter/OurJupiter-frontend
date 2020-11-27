@@ -23,15 +23,19 @@ class OurJupiter {
   private registerVuesax() {
     Vue.use(Vuesax);
     const vuesax3Comps = [vsIcon];
-    vuesax3Comps.forEach((comp) => {
+    vuesax3Comps.forEach(comp => {
       Vue.use(comp);
     });
   }
 
   private registerVuePlugins() {
     const requirePlugin = require.context('./plugins', true, /\.ts$/);
-    requirePlugin.keys().forEach((fileName) => {
-      if (fileName.includes('types') || fileName.includes('test') || fileName.includes('index')) {
+    requirePlugin.keys().forEach(fileName => {
+      if (
+        fileName.includes('types') ||
+        fileName.includes('test') ||
+        fileName.includes('index')
+      ) {
         return;
       }
 
@@ -46,17 +50,29 @@ class OurJupiter {
   }
 
   private registerBaseComponents() {
-    const requireComponent = require.context('./views/common/base-components', false, /\.vue$/);
+    const requireComponent = require.context(
+      './views/common/base-components',
+      false,
+      /\.vue$/
+    );
     this.registerContext(requireComponent);
   }
 
   private registerPluginComponents() {
-    const requireComponent = require.context('./views/common/plugin-components', false, /\.vue$/);
+    const requireComponent = require.context(
+      './views/common/plugin-components',
+      false,
+      /\.vue$/
+    );
     this.registerContext(requireComponent);
   }
 
   private registerInputComponents() {
-    const requireComponent = require.context('./views/common/input-components', false, /\.vue$/);
+    const requireComponent = require.context(
+      './views/common/input-components',
+      false,
+      /\.vue$/
+    );
     this.registerContext(requireComponent);
   }
 

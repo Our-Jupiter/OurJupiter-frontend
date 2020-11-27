@@ -29,7 +29,12 @@
       <div class="button">
         <BaseButton @click="enterFeed($route.params.id)">그룹 피드</BaseButton>
         <BaseButton>인증 현황</BaseButton>
-        <BaseButton @click="enterCertification">인증하기</BaseButton>
+        <BaseButton @click="enterCertification" v-if="!certificationDailyCheck"
+          >인증하기</BaseButton
+        >
+        <BaseButton color="warn" v-if="certificationDailyCheck"
+          >인증완료</BaseButton
+        >
       </div>
     </div>
     <div class="content">
@@ -38,6 +43,21 @@
         <BaseButton @click="setGoalPenalty">목표 입력하기</BaseButton>
       </div>
       <h2 v-else>이번 루틴 목표는 {{ goal }} 입니다</h2>
+    </div>
+    <div class="daily">
+      <div v-if="!certificationDailyCheck">
+        <h2>
+          <p>{{ today }}</p>
+        </h2>
+        <h3>오늘 인증을 아직 하지 않았습니다!</h3>
+      </div>
+      <div v-else>
+        <h2>
+          <p>{{ today }}</p>
+        </h2>
+        <br />
+        <h3>오늘의 인증을 완료하였습니다!</h3>
+      </div>
     </div>
   </div>
 </template>
@@ -57,13 +77,16 @@ export default Vue.extend({
       ownerEmail: '',
       goal: '',
       penalty: '',
+      today: '',
       activeRoutineStartDate: '',
+      certificationDailyCheck: '',
     };
   },
   beforeMount() {
     this.getGroupOwnerEmail();
     this.getRoutineInfo();
-    console.log(new Date());
+    this.getDailyCheckInfo();
+    this.today = this.getFormatDate(new Date());
   },
   computed: {
     headers(): object {
@@ -82,6 +105,14 @@ export default Vue.extend({
     },
   },
   methods: {
+    getFormatDate(date: any) {
+      const year = date.getFullYear(); //yyyy
+      let month = 1 + date.getMonth(); //M
+      month = month >= 10 ? month : '0' + month; //month 두자리로 저장
+      let day = date.getDate(); //d
+      day = day >= 10 ? day : '0' + day; //day 두자리로 저장
+      return year + '-' + month + '-' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+    },
     async getGroupOwnerEmail() {
       const data = await axios.get(
         'http://localhost:8080/group/' + this.$route.params.id
@@ -118,10 +149,21 @@ export default Vue.extend({
       );
       this.activeRoutineStartDate = data.data;
     },
+    async getDailyCheckInfo() {
+      const data = await axios.get(
+        `http://localhost:8080/certification/${this.$route.params.id}`,
+        { headers: this.headers }
+      );
+      this.certificationDailyCheck = data.data;
+      console.log(this.certificationDailyCheck);
+    },
     async createRoutine() {
       await axios.post(
         'http://localhost:8080/routine/',
-        { groupId: this.$route.params.id, startDate: new Date() },
+        {
+          groupId: this.$route.params.id,
+          startDate: new Date(),
+        },
         { headers: this.headers }
       );
     },
@@ -189,6 +231,16 @@ export default Vue.extend({
     display: flex;
     justify-content: center;
     border: 1px solid;
+    border-radius: 5px;
+  }
+
+  .daily {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    border: 1px solid;
+    margin: 4rem 4rem 4rem 4rem;
+    padding: 2rem 2rem 2rem 2rem;
     border-radius: 5px;
   }
 
