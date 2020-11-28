@@ -28,7 +28,9 @@
       </div>
       <div class="button">
         <BaseButton @click="enterFeed($route.params.id)">그룹 피드</BaseButton>
-        <BaseButton>인증 현황</BaseButton>
+        <BaseButton v-if="activeRoutineStartDate" @click="enterlist"
+          >인증 현황</BaseButton
+        >
         <BaseButton @click="enterCertification" v-if="!certificationDailyCheck"
           >인증하기</BaseButton
         >
@@ -46,7 +48,7 @@
     </div>
     <div class="daily">
       <div v-if="!certificationDailyCheck">
-        <h2>
+        <h2 class="todayDaily">
           <p>{{ today }}</p>
         </h2>
         <h3>오늘 인증을 아직 하지 않았습니다!</h3>
@@ -122,6 +124,17 @@ export default Vue.extend({
     enterFeed(groupId: number) {
       router.push({ path: `/list/${groupId}` });
     },
+    enterlist() {
+      router.push({
+        name: 'certificationList',
+        params: {
+          groupId: this.$route.params.id,
+        },
+        query: {
+          groupName: this.$route.query.groupName,
+        },
+      });
+    },
     enterCertification() {
       router.push({
         name: 'certificationCreate',
@@ -155,7 +168,6 @@ export default Vue.extend({
         { headers: this.headers }
       );
       this.certificationDailyCheck = data.data;
-      console.log(this.certificationDailyCheck);
     },
     async createRoutine() {
       await axios.post(
@@ -242,6 +254,11 @@ export default Vue.extend({
     margin: 4rem 4rem 4rem 4rem;
     padding: 2rem 2rem 2rem 2rem;
     border-radius: 5px;
+
+    .todayDaily {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   @media (max-width: 760px) {

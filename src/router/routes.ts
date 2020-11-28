@@ -11,6 +11,7 @@ import Detail from '@/views/pages/posts/Detail.vue';
 import Update from '@/views/pages/posts/Update.vue';
 import List from '@/views/pages/posts/List.vue';
 import CertificationCreate from '@/views/pages/certification/CertificationCreate.vue';
+import CertificationList from '@/views/pages/certification/CertificationList.vue';
 
 const routes: Array<RouteConfig> = [
   {
@@ -42,6 +43,11 @@ const routes: Array<RouteConfig> = [
     path: '/certification',
     name: 'certificationCreate',
     component: CertificationCreate,
+  },
+  {
+    path: '/certificationList',
+    name: 'certificationList',
+    component: CertificationList,
   },
   {
     path: '/save',
