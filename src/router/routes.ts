@@ -45,7 +45,7 @@ const routes: Array<RouteConfig> = [
     component: CertificationCreate,
   },
   {
-    path: '/certificationList',
+    path: '/certificationList/:groupId',
     name: 'certificationList',
     component: CertificationList,
   },
