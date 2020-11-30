@@ -31,35 +31,35 @@
         <BaseButton v-if="activeRoutineStartDate" @click="enterlist"
           >인증 현황</BaseButton
         >
-        <BaseButton @click="enterCertification" v-if="!certificationDailyCheck"
+        <BaseButton
+          v-if="goal && !certificationDailyCheck"
+          @click="enterCertification"
           >인증하기</BaseButton
         >
-        <BaseButton color="warn" v-if="certificationDailyCheck"
+        <BaseButton color="success" v-if="goal && certificationDailyCheck"
           >인증완료</BaseButton
         >
       </div>
     </div>
     <div class="content">
-      <div v-if="!activeRoutineStartDate">루틴 미진행 중 입니다.</div>
-      <div v-if="activeRoutineStartDate && !goal">
-        이번 루틴 목표를 아직 입력하지 않았어요!
+      <div v-if="!activeRoutineStartDate">
+        <h3>루틴 미진행 중 입니다.</h3>
+      </div>
+      <div v-if="activeRoutineStartDate && !goal" class="goalInfo">
+        <h3>이번 루틴 목표를 아직 입력하지 않았어요!</h3>
         <BaseButton @click="setGoalPenalty">목표 입력하기</BaseButton>
       </div>
-      <h2 v-if="activeRoutineStartDate && goal">
-        이번 루틴 목표는 {{ goal }} 입니다
-      </h2>
+      <h3 v-if="activeRoutineStartDate && goal">
+        이번 루틴 목표는 ' {{ goal }} ' 입니다.
+      </h3>
     </div>
     <div class="daily" v-if="activeRoutineStartDate && goal">
       <div v-if="!certificationDailyCheck">
-        <h2 class="todayDaily">
-          <p>{{ today }}</p>
-        </h2>
-        <h3>오늘 인증을 아직 하지 않았습니다!</h3>
+        <h3>{{ today }}</h3>
+        <h3>오늘 인증을 아직 하지 않았습니다! 인증해주세요</h3>
       </div>
       <div v-else>
-        <h2>
-          <p>{{ today }}</p>
-        </h2>
+        <h3>{{ today }}</h3>
         <br />
         <h3>오늘의 인증을 완료하였습니다!</h3>
       </div>
@@ -70,6 +70,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
+import moment from 'moment';
 import router from '@/router';
 import GroupSetting from './GroupSetting.vue';
 import GroupInvite from './GroupInvite.vue';
@@ -84,6 +85,7 @@ export default Vue.extend({
       penalty: '',
       today: '',
       activeRoutineStartDate: '',
+      activeRoutineEndDate: '',
       certificationDailyCheck: '',
     };
   },
@@ -164,6 +166,9 @@ export default Vue.extend({
         `http://localhost:8080/routine/${this.$route.params.id}`
       );
       this.activeRoutineStartDate = data.data;
+      this.activeRoutineEndDate = moment(data.data, 'YYYY-MM-DD')
+        .add(13, 'days')
+        .format('YYYY-MM-DD');
     },
     async getDailyCheckInfo() {
       const data = await axios.get(
@@ -209,11 +214,14 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .main {
+  background-color: rgba(30, 32, 35, 1);
+  color: white;
   width: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  padding: 3rem 2rem;
 
   .manage {
     width: 100%;
@@ -229,7 +237,7 @@ export default Vue.extend({
 
     .avatar {
       display: flex;
-      margin: 3rem 6rem;
+      margin: 2rem 6rem 2rem 0rem;
 
       .name {
         margin: 1.6rem;
@@ -237,25 +245,37 @@ export default Vue.extend({
     }
     .button {
       display: flex;
-      margin: 4rem 6rem;
+      margin: 3rem 0rem 3rem 6rem;
     }
   }
 
   .content {
-    width: 70%;
+    width: 80%;
+    background-color: rgba(244, 247, 248, 1);
+    color: black;
     display: flex;
     justify-content: center;
     border: 1px solid;
     border-radius: 5px;
+    padding: 1rem 0;
+
+    .goalInfo {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   .daily {
-    width: 70%;
+    width: 80%;
+    background-color: rgba(244, 247, 248, 1);
+    color: black;
     display: flex;
     justify-content: center;
     border: 1px solid;
-    margin: 4rem 4rem 4rem 4rem;
-    padding: 2rem 2rem 2rem 2rem;
+    margin: 1rem 4rem;
+    padding: 2rem;
     border-radius: 5px;
 
     .todayDaily {
@@ -266,7 +286,9 @@ export default Vue.extend({
 
   @media (max-width: 760px) {
     .manage {
-      margin-right: 5%;
+      margin: 0.5rem 0rem;
+      display: flex;
+      justify-content: center;
     }
 
     .header {
@@ -275,16 +297,26 @@ export default Vue.extend({
 
       .avatar {
         display: flex;
-        margin: 1.5rem 3rem;
+        margin: 1rem 3rem;
 
         .name {
-          margin: 0.8rem;
+          margin: 1rem;
         }
       }
       .button {
         display: flex;
-        margin: 2rem 3rem;
+        margin: 1.5rem 0rem 1.5rem 0rem;
       }
+    }
+
+    .content {
+      width: 90%;
+      font-size: 0.7rem;
+    }
+
+    .daily {
+      width: 90%;
+      font-size: 0.7rem;
     }
   }
 }
