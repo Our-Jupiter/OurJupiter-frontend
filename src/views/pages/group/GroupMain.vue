@@ -28,16 +28,45 @@
       </div>
       <div class="button">
         <BaseButton @click="enterFeed($route.params.id)">그룹 피드</BaseButton>
-        <BaseButton>인증 현황</BaseButton>
-        <BaseButton>인증하기</BaseButton>
+        <BaseButton v-if="activeRoutineStartDate" @click="enterlist"
+          >인증 현황</BaseButton
+        >
+        <BaseButton
+          v-if="goal && !certificationDailyCheck"
+          @click="enterCertification"
+          >인증하기</BaseButton
+        >
+        <BaseButton color="success" v-if="goal && certificationDailyCheck"
+          >인증완료</BaseButton
+        >
       </div>
     </div>
+    <div v-if="today === activeRoutineEndDate" class="goFeedback">
+      오늘은 루틴 종료 날 입니다. 피드백을 제출해주세요.
+      <BaseButton @click="enterlist">피드백 제출하러 가기</BaseButton>
+    </div>
     <div class="content">
-      <div v-if="!goal">
-        이번 루틴 목표를 아직 입력하지 않았어요!
+      <div v-if="!activeRoutineStartDate">
+        <h3>루틴 미진행 중 입니다.</h3>
+      </div>
+      <div v-if="activeRoutineStartDate && !goal" class="goalInfo">
+        <h3>이번 루틴 목표를 아직 입력하지 않았어요!</h3>
         <BaseButton @click="setGoalPenalty">목표 입력하기</BaseButton>
       </div>
-      <h2 v-else>이번 루틴 목표는 {{ goal }} 입니다</h2>
+      <h3 v-if="activeRoutineStartDate && goal">
+        이번 루틴 목표는 ' {{ goal }} ' 입니다.
+      </h3>
+    </div>
+    <div class="daily" v-if="activeRoutineStartDate && goal">
+      <div v-if="!certificationDailyCheck">
+        <h3>{{ today }}</h3>
+        <h3>오늘 인증을 아직 하지 않았습니다! 인증해주세요</h3>
+      </div>
+      <div v-else>
+        <h3>{{ today }}</h3>
+        <br />
+        <h3>오늘의 인증을 완료하였습니다!</h3>
+      </div>
     </div>
   </div>
 </template>
@@ -45,6 +74,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
+import moment from 'moment';
 import router from '@/router';
 import GroupSetting from './GroupSetting.vue';
 import GroupInvite from './GroupInvite.vue';
@@ -57,12 +87,17 @@ export default Vue.extend({
       ownerEmail: '',
       goal: '',
       penalty: '',
+      today: '',
       activeRoutineStartDate: '',
+      activeRoutineEndDate: '',
+      certificationDailyCheck: '',
     };
   },
   beforeMount() {
     this.getGroupOwnerEmail();
     this.getRoutineInfo();
+    this.getDailyCheckInfo();
+    this.today = this.getFormatDate(new Date());
   },
   computed: {
     headers(): object {
@@ -81,6 +116,14 @@ export default Vue.extend({
     },
   },
   methods: {
+    getFormatDate(date: any) {
+      const year = date.getFullYear(); //yyyy
+      let month = 1 + date.getMonth(); //M
+      month = month >= 10 ? month : '0' + month; //month 두자리로 저장
+      let day = date.getDate(); //d
+      day = day >= 10 ? day : '0' + day; //day 두자리로 저장
+      return year + '-' + month + '-' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+    },
     async getGroupOwnerEmail() {
       const data = await axios.get(
         'http://localhost:8080/group/' + this.$route.params.id
@@ -89,6 +132,28 @@ export default Vue.extend({
     },
     enterFeed(groupId: number) {
       router.push({ path: `/list/${groupId}` });
+    },
+    enterlist() {
+      router.push({
+        name: 'certificationList',
+        params: {
+          groupId: this.$route.params.id,
+        },
+        query: {
+          groupName: this.$route.query.groupName,
+        },
+      });
+    },
+    enterCertification() {
+      router.push({
+        name: 'certificationCreate',
+        params: {
+          groupId: this.$route.params.id,
+        },
+        query: {
+          groupName: this.$route.query.groupName,
+        },
+      });
     },
     manageGroup() {
       this.$popup.open({
@@ -105,11 +170,24 @@ export default Vue.extend({
         `http://localhost:8080/routine/${this.$route.params.id}`
       );
       this.activeRoutineStartDate = data.data;
+      this.activeRoutineEndDate = moment(data.data, 'YYYY-MM-DD')
+        .add(13, 'days')
+        .format('YYYY-MM-DD');
+    },
+    async getDailyCheckInfo() {
+      const data = await axios.get(
+        `http://localhost:8080/certification/${this.$route.params.id}`,
+        { headers: this.headers }
+      );
+      this.certificationDailyCheck = data.data;
     },
     async createRoutine() {
       await axios.post(
         'http://localhost:8080/routine/',
-        { groupId: this.$route.params.id, startDate: new Date() },
+        {
+          groupId: this.$route.params.id,
+          startDate: new Date(),
+        },
         { headers: this.headers }
       );
     },
@@ -140,11 +218,14 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .main {
+  background-color: rgba(30, 32, 35, 1);
+  color: white;
   width: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  padding: 3rem 2rem;
 
   .manage {
     width: 100%;
@@ -160,7 +241,7 @@ export default Vue.extend({
 
     .avatar {
       display: flex;
-      margin: 3rem 6rem;
+      margin: 2rem 6rem 2rem 0rem;
 
       .name {
         margin: 1.6rem;
@@ -168,21 +249,56 @@ export default Vue.extend({
     }
     .button {
       display: flex;
-      margin: 4rem 6rem;
+      margin: 3rem 0rem 3rem 6rem;
     }
   }
 
+  .goFeedback {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0rem;
+  }
+
   .content {
-    width: 70%;
+    width: 80%;
+    background-color: rgba(244, 247, 248, 1);
+    color: black;
     display: flex;
     justify-content: center;
     border: 1px solid;
     border-radius: 5px;
+    padding: 1rem 0;
+
+    .goalInfo {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .daily {
+    width: 80%;
+    background-color: rgba(244, 247, 248, 1);
+    color: black;
+    display: flex;
+    justify-content: center;
+    border: 1px solid;
+    margin: 1rem 4rem;
+    padding: 2rem;
+    border-radius: 5px;
+
+    .todayDaily {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   @media (max-width: 760px) {
     .manage {
-      margin-right: 5%;
+      margin: 0.5rem 0rem;
+      display: flex;
+      justify-content: center;
     }
 
     .header {
@@ -191,16 +307,26 @@ export default Vue.extend({
 
       .avatar {
         display: flex;
-        margin: 1.5rem 3rem;
+        margin: 1rem 3rem;
 
         .name {
-          margin: 0.8rem;
+          margin: 1rem;
         }
       }
       .button {
         display: flex;
-        margin: 2rem 3rem;
+        margin: 1.5rem 0rem 1.5rem 0rem;
       }
+    }
+
+    .content {
+      width: 90%;
+      font-size: 0.7rem;
+    }
+
+    .daily {
+      width: 90%;
+      font-size: 0.7rem;
     }
   }
 }

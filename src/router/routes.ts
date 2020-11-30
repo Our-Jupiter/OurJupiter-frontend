@@ -10,6 +10,8 @@ import Save from '@/views/pages/posts/Save.vue';
 import Detail from '@/views/pages/posts/Detail.vue';
 import Update from '@/views/pages/posts/Update.vue';
 import List from '@/views/pages/posts/List.vue';
+import CertificationCreate from '@/views/pages/certification/CertificationCreate.vue';
+import CertificationList from '@/views/pages/certification/CertificationList.vue';
 
 const routes: Array<RouteConfig> = [
   {
@@ -30,11 +32,22 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/group/:id',
+    name: 'groupMain',
     component: GroupMain,
   },
   {
     path: '/invite/:userId/:groupId',
     component: GroupJoin,
+  },
+  {
+    path: '/certification',
+    name: 'certificationCreate',
+    component: CertificationCreate,
+  },
+  {
+    path: '/certificationList/:groupId',
+    name: 'certificationList',
+    component: CertificationList,
   },
   {
     path: '/save',

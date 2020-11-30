@@ -30,7 +30,7 @@ export default Vue.extend({
   methods: {
     async setGoalPenalty() {
       try {
-        await axios.post(
+        await axios.put(
           `http://localhost:8080/goal/${this.popupData.groupId}`,
           {
             goal: this.goal,

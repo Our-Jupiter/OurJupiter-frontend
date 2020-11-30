@@ -1,18 +1,15 @@
 <template>
-  <div class="save">
-    <div class="form">
-      <form id="UploadForm" enctype=”multipart/form-data” name="upload">
-        <div class="form-group">
-          <BaseInput v-model= "title" type="text" class="form-control" id="title" label="제목"/>
-        </div>
+  <div class="certification">
+      <h1>오늘의 인증</h1>
+      <div class="form">
+      <form id="CertificationForm" enctype=”multipart/form-data” name="certification">
         <div class="form-group">
           <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자" :placeholder="$store.state.me.me.name" disabled />
         </div>
-        <br>
         <div class="form-group">
-          <label>내용: </label>
-          <textarea v-model= "content" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
+          <BaseInput type="text" v-model= "today" class="form-control" id="author" label="오늘 날짜" :placeholder="today" disabled />
         </div>
+        <br>
         <br>
         <div class="form-group">
           <div class="custom-file" id="inputFile">
@@ -26,10 +23,9 @@
       </form>
       </div>
       <div class="button">
-        <BaseButton @click="back()">취소</BaseButton>
-        <BaseButton @click="save">등록</BaseButton>
+        <BaseButton @click="back">취소</BaseButton>
+        <BaseButton @click="createCertification">등록</BaseButton>
       </div>
-    
   </div>
 </template>
 
@@ -39,44 +35,63 @@ import axios from 'axios';
 import router from '@/router';
 
 export default Vue.extend({
-  name: 'Save',
+  name: 'CertificationCreate',
   data() {
     return {
-      title: '',
       author: '',
-      content: '',
+      today: '',
       groupId: '',
       imageData: '',
     };
   },
-  methods: {
-    back() {
-      router.push({ name: 'list', params: { id: this.$route.params.id } });
+  beforeMount() {
+    this.today = this.getFormatDate(new Date());
+  },
+  computed: {
+    headers(): object {
+      const token = localStorage.getItem('token');
+      return token ? { 'x-access-token': token } : {};
     },
-    async save() {
+  },
+  methods: {
+    getFormatDate(date: any) {
+      const year = date.getFullYear(); //yyyy
+      let month = 1 + date.getMonth(); //M
+      month = month >= 10 ? month : '0' + month; //month 두자리로 저장
+      let day = date.getDate(); //d
+      day = day >= 10 ? day : '0' + day; //day 두자리로 저장
+      return year + '-' + month + '-' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+    },
+    back() {
+      router.push({
+        name: 'groupMain',
+        params: { id: this.$route.params.groupId },
+        query: { groupName: this.$route.query.groupName },
+      });
+    },
+    async createCertification() {
       const form = new FormData(
-        document.getElementById('UploadForm') as HTMLFormElement
+        document.getElementById('CertificationForm') as HTMLFormElement
       );
-
-      form.append('title', this.title);
-      form.append('content', this.content);
-      form.append('author', this.$store.state.me.me.name);
-      form.append('authorEmail', this.$store.state.me.me.email);
-      form.append('groupId', this.$route.params.id);
-
-      if (!this.title) {
-        this.$snackbar.warn('제목을 모두 입력해주세요');
-        return;
-      }
-
+      form.append('groupId', this.$route.params.groupId);
+      form.append('userId', this.$store.state.me.me.id);
+      form.append('todayDate', this.today);
       try {
-        const data = await axios.post('http://localhost:8080/board', form, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+        const data = await axios.post(
+          'http://localhost:8080/certification',
+          form,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
+        this.$snackbar.success('오늘 인증을 완료하였습니다!');
+        router.push({
+          name: 'groupMain',
+          params: { id: this.$route.params.groupId },
+          query: { groupName: this.$route.query.groupName },
         });
-        this.$snackbar.success('글이 등록되었습니다!');
-        router.push({ path: `/list/${this.$route.params.id}` });
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }
@@ -96,7 +111,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.save {
+.certification {
   display: flex;
   flex-direction: column;
   justify-content: center;
