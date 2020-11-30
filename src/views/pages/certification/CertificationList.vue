@@ -19,20 +19,21 @@
     <ul class="certificationUl">
       <li
         v-for="certification in certificationList"
-        :key="certification.key"
+        :key="certification.userName"
         class="certificationLi"
       >
+        <h4>{{ certification.userName }}</h4>
         <BaseCard
           class="certification"
-          v-if="certification.value"
-          :title="certification.key"
+          v-if="certification.fileId"
+          :title="certification.todayDate"
           author="오늘의 인증 완료!"
-          :img="image + certification.value"
+          :img="image + certification.fileId"
         />
         <BaseCard
           class="certification"
           v-else
-          :title="certification.key"
+          :title="certification.todayDate"
           author="아직 인증하지 않았습니다!"
         />
       </li>
