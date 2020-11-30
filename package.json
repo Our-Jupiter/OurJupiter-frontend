@@ -9,13 +9,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@types/vue-moment": "^4.0.2",
     "axios": "^0.21.0",
     "babel-eslint": "^10.1.0",
     "core-js": "^3.6.5",
     "material-icons": "^0.3.1",
+    "moment": "^2.29.1",
     "vue": "^2.6.11",
-    "vue-moment": "^4.1.0",
     "vue-router": "^3.2.0",
     "vuesax3": "npm:vuesax@^3.11.17",
     "vuesax4": "npm:vuesax@4.0.1-alpha.25",
