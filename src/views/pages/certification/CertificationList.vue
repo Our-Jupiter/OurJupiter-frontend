@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="button">
+    <div class="backButton">
       <BaseButton @click="back">뒤로가기</BaseButton>
     </div>
     <div class="header">
@@ -18,28 +18,37 @@
         </div>
       </div>
     </div>
-    <ul class="certificationUl">
-      <li
-        v-for="(certification, index) in certificationList"
-        :key="index"
-        class="certificationLi"
-      >
-        <h4>{{ certification.userName }}</h4>
+    <div
+      v-for="(certification, index) in certificationList"
+      :key="index"
+      class="certificationList"
+    >
+      <div class="toggle">
+        {{ certification.key }}
+      </div>
+      <div class="certification">
         <BaseCard
-          class="certification"
-          v-if="certification.fileId"
-          :title="certification.todayDate"
-          author="오늘의 인증 완료!"
-          :img="image + certification.fileId"
+          v-for="(day, idx) in certification.value"
+          :key="idx"
+          :title="day.todayDate"
+          :author="
+            day.fileId ? '오늘의 인증 완료!' : '아직 인증하지 않았습니다!'
+          "
+          :img="day.fileId ? image + day.fileId : undefined"
+          class="card"
         />
-        <BaseCard
-          class="certification"
-          v-else
-          :title="certification.todayDate"
-          author="아직 인증하지 않았습니다!"
+      </div>
+      <div v-if="endDate === today && !doFeedback" class="button">
+        <BaseCheckBox
+          v-model="agree[index]"
+          label="수락하기"
+          :checkedValue="certification.key"
         />
-      </li>
-    </ul>
+      </div>
+    </div>
+    <div v-if="endDate === today && !doFeedback" class="feedbackButton">
+      <BaseButton @click="feedback">피드백 제출하기</BaseButton>
+    </div>
   </div>
 </template>
 
@@ -47,6 +56,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import router from '@/router';
+import moment from 'moment';
 
 export default Vue.extend({
   name: 'CertificationList',
@@ -58,12 +68,20 @@ export default Vue.extend({
       image: '',
       goalList: [],
       certificationList: [],
+      doFeedback: false,
+      endDate: '',
+      agree: [] as string[],
     };
   },
-  beforeMount() {
+  async beforeMount() {
     this.today = this.getFormatDate(new Date());
-    this.getGoalList();
-    this.getDailyCertification();
+    this.getRoutineInfo();
+    this.getDoFeedback();
+    await this.getGoalList();
+    await this.getDailyCertification();
+    for (let i = 0; i < this.goalList.length; i++) {
+      this.agree.push('');
+    }
   },
   computed: {
     headers(): object {
@@ -82,6 +100,14 @@ export default Vue.extend({
       let day = date.getDate(); //d
       day = day >= 10 ? day : '0' + day; //day 두자리로 저장
       return year + '-' + month + '-' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+    },
+    async getRoutineInfo() {
+      const data = await axios.get(
+        `http://localhost:8080/routine/${this.$route.params.groupId}`
+      );
+      this.endDate = moment(data.data, 'YYYY-MM-DD')
+        .add(13, 'days')
+        .format('YYYY-MM-DD');
     },
     async getGoalList() {
       try {
@@ -106,6 +132,33 @@ export default Vue.extend({
         this.$snackbar.error(err.response.data.message);
       }
     },
+    async getDoFeedback() {
+      try {
+        const data = await axios.get(
+          `http://localhost:8080/feedback/${this.$route.params.groupId}`,
+          { headers: this.headers }
+        );
+        this.doFeedback = data.data;
+      } catch (err) {
+        this.$snackbar.error(err.response.data.message);
+      }
+    },
+    async feedback() {
+      this.agree = this.agree.map((a) => {
+        return !a ? '' : a;
+      });
+      try {
+        await axios.put(
+          `http://localhost:8080/feedback/${this.$route.params.groupId}`,
+          this.agree,
+          { headers: this.headers }
+        );
+        this.$snackbar.success('피드백 제출이 완료되었습니다 !');
+        this.back();
+      } catch (err) {
+        this.$snackbar.error(err.response.data.message);
+      }
+    },
     back() {
       router.go(-1);
     },
@@ -120,7 +173,7 @@ export default Vue.extend({
   min-height: 100%;
   margin: 0;
 
-  .button {
+  .backButton {
     display: flex;
     justify-content: flex-end;
     padding: 1rem 1rem 0 0;
@@ -158,38 +211,59 @@ export default Vue.extend({
     }
   }
 
-  .certificationUl {
-    display: grid;
-    grid-template-columns: 30% 30% 30%;
+  .certificationList {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 2rem 4rem;
+    padding: 2rem;
 
-    .certificationLi {
-      list-style: none;
-      margin: 1.5rem 1rem;
+    .toggle {
+      display: flex;
+      justify-content: center;
+      background-color: white;
+      color: black;
+      width: 100%;
+      border-radius: 5px;
+      padding: 0.5rem 0;
     }
 
     .certification {
-      margin: 1rem;
-      text-align: center;
-    }
-  }
-  @media (max-width: 760px) {
-    .goalList {
       display: grid;
-      grid-template-columns: 100%;
+      grid-template-columns: 33% 33% 33%;
       justify-content: center;
       align-items: center;
-      padding: 2rem;
 
+      .card {
+        padding: 1rem;
+        text-align: center;
+      }
+    }
+
+    .button {
+      display: flex;
+    }
+  }
+  .feedbackButton {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0 3rem 0;
+  }
+
+  @media (max-width: 760px) {
+    .goalList {
       .goal {
         font-size: 1rem;
       }
     }
 
-    .certificationUl {
-      display: grid;
-      grid-template-columns: 1fr;
+    .certificationList {
+      margin: 0;
+      .certification {
+        display: grid;
+        grid-template-columns: 100%;
+      }
     }
   }
 }
