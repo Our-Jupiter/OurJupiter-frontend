@@ -41,6 +41,10 @@
         >
       </div>
     </div>
+    <div v-if="today === activeRoutineEndDate" class="goFeedback">
+      오늘은 루틴 종료 날 입니다. 피드백을 제출해주세요.
+      <BaseButton @click="enterlist">피드백 제출하러 가기</BaseButton>
+    </div>
     <div class="content">
       <div v-if="!activeRoutineStartDate">
         <h3>루틴 미진행 중 입니다.</h3>
@@ -247,6 +251,12 @@ export default Vue.extend({
       display: flex;
       margin: 3rem 0rem 3rem 6rem;
     }
+  }
+
+  .goFeedback {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0rem;
   }
 
   .content {
