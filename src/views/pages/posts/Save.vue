@@ -17,7 +17,7 @@
         <div class="form-group">
           <div class="custom-file" id="inputFile">
             <label class="custom-file-label" for="customFile">파일을 선택해 주세요. </label>
-            <input name="file" type="file" class="custom-file-input" id="customFile" ref="file" @change="previewImage">
+            <input name="file" type="file" class="custom-file-input" id="customFile" ref="file" @change="uploadImage">
           </div>
           <div class="image-preview" v-if="imageData.length > 0">
             <img class="preview" :src="imageData" width="50%" height="50%">
@@ -45,7 +45,7 @@ export default Vue.extend({
       title: '',
       author: '',
       content: '',
-      groupId:'',
+      groupId: '',
       imageData: '',
     };
   },
@@ -60,8 +60,8 @@ export default Vue.extend({
 
       form.append('title', this.title);
       form.append('content', this.content);
-      form.append('author',this.$store.state.me.me.name);
-      form.append('authorEmail',this.$store.state.me.me.email);
+      form.append('author', this.$store.state.me.me.name);
+      form.append('authorEmail', this.$store.state.me.me.email);
       form.append('groupId', this.$route.params.id);
 
       if (!this.title) {
@@ -81,7 +81,7 @@ export default Vue.extend({
         this.$snackbar.error(err.response.data.message);
       }
     },
-    previewImage: function(event: Event) {
+    uploadImage: function (event: Event) {
       const input = event.target as HTMLInputElement;
       if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -118,12 +118,12 @@ export default Vue.extend({
 
 @media (max-width: 760px) {
   .form {
-      display: grid;
-      grid-template-columns: 80%;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem;
-    }
+    display: grid;
+    grid-template-columns: 80%;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+  }
   .button {
     display: flex;
     margin: 1rem 3rem;

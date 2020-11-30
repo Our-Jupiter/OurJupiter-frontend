@@ -14,7 +14,7 @@
         <div class="form-group">
           <div class="custom-file" id="inputFile">
             <label class="custom-file-label" for="customFile">파일을 선택해 주세요. </label>
-            <input name="file" type="file" class="custom-file-input" id="customFile" ref="file" @change="previewImage">
+            <input name="file" type="file" class="custom-file-input" id="customFile" ref="file" @change="uploadImage">
           </div>
           <div class="image-preview" v-if="imageData.length > 0">
             <img class="preview" :src="imageData" width="50%" height="50%">
@@ -23,7 +23,7 @@
       </form>
       </div>
       <div class="button">
-        <BaseButton @click="back()">취소</BaseButton>
+        <BaseButton @click="back">취소</BaseButton>
         <BaseButton @click="createCertification">등록</BaseButton>
       </div>
   </div>
@@ -40,11 +40,11 @@ export default Vue.extend({
     return {
       author: '',
       today: '',
-      groupId:'',
+      groupId: '',
       imageData: '',
     };
   },
-  beforeMount() { 
+  beforeMount() {
     this.today = this.getFormatDate(new Date());
   },
   computed: {
@@ -54,38 +54,49 @@ export default Vue.extend({
     },
   },
   methods: {
-    getFormatDate(date:any){
-    const year = date.getFullYear();              //yyyy
-    let month = (1 + date.getMonth());          //M
-    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
-    let day = date.getDate();                   //d
-    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
-    return  year + '-' + month + '-' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+    getFormatDate(date: any) {
+      const year = date.getFullYear(); //yyyy
+      let month = 1 + date.getMonth(); //M
+      month = month >= 10 ? month : '0' + month; //month 두자리로 저장
+      let day = date.getDate(); //d
+      day = day >= 10 ? day : '0' + day; //day 두자리로 저장
+      return year + '-' + month + '-' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
     },
     back() {
-      router.push({ name: 'groupMain', params: { id: this.$route.params.groupId}, query: {groupName: this.$route.query.groupName} });
+      router.push({
+        name: 'groupMain',
+        params: { id: this.$route.params.groupId },
+        query: { groupName: this.$route.query.groupName },
+      });
     },
     async createCertification() {
       const form = new FormData(
         document.getElementById('CertificationForm') as HTMLFormElement
       );
-      form.append('groupId',this.$route.params.groupId);
-      form.append('userId',this.$store.state.me.me.id);
-      form.append('todayDate',this.today);
+      form.append('groupId', this.$route.params.groupId);
+      form.append('userId', this.$store.state.me.me.id);
+      form.append('todayDate', this.today);
       try {
-        const data = await axios.post('http://localhost:8080/certification', form,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-        });
+        const data = await axios.post(
+          'http://localhost:8080/certification',
+          form,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        );
         this.$snackbar.success('오늘 인증을 완료하였습니다!');
-        router.push({ name: 'groupMain', params: { id: this.$route.params.groupId}, query: {groupName: this.$route.query.groupName} });
+        router.push({
+          name: 'groupMain',
+          params: { id: this.$route.params.groupId },
+          query: { groupName: this.$route.query.groupName },
+        });
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }
     },
-      previewImage: function(event: Event) {
+    uploadImage: function (event: Event) {
       const input = event.target as HTMLInputElement;
       if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -95,7 +106,7 @@ export default Vue.extend({
         reader.readAsDataURL(input.files[0]);
       }
     },
-  }
+  },
 });
 </script>
 
@@ -122,12 +133,12 @@ export default Vue.extend({
 
 @media (max-width: 760px) {
   .form {
-      display: grid;
-      grid-template-columns: 80%;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem;
-    }
+    display: grid;
+    grid-template-columns: 80%;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+  }
   .button {
     display: flex;
     margin: 1rem 3rem;
