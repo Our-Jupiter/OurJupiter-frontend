@@ -40,13 +40,16 @@
       </div>
     </div>
     <div class="content">
-      <div v-if="!goal">
+      <div v-if="!activeRoutineStartDate">루틴 미진행 중 입니다.</div>
+      <div v-if="activeRoutineStartDate && !goal">
         이번 루틴 목표를 아직 입력하지 않았어요!
         <BaseButton @click="setGoalPenalty">목표 입력하기</BaseButton>
       </div>
-      <h2 v-else>이번 루틴 목표는 {{ goal }} 입니다</h2>
+      <h2 v-if="activeRoutineStartDate && goal">
+        이번 루틴 목표는 {{ goal }} 입니다
+      </h2>
     </div>
-    <div class="daily">
+    <div class="daily" v-if="activeRoutineStartDate && goal">
       <div v-if="!certificationDailyCheck">
         <h2 class="todayDaily">
           <p>{{ today }}</p>
