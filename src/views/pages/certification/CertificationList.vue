@@ -1,5 +1,8 @@
 <template>
   <div class="wrapper">
+    <div class="button">
+      <BaseButton @click="back">뒤로가기</BaseButton>
+    </div>
     <div class="header">
       <h2 class="title">
         {{ this.$route.query.groupName }} 의 이번 루틴 인증 현황
@@ -103,6 +106,9 @@ export default Vue.extend({
         this.$snackbar.error(err.response.data.message);
       }
     },
+    back() {
+      router.go(-1);
+    },
   },
 });
 </script>
@@ -114,6 +120,12 @@ export default Vue.extend({
   min-height: 100%;
   margin: 0;
 
+  .button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 1rem 0 0;
+  }
+
   .header {
     display: flex;
     flex-direction: column;
@@ -121,7 +133,7 @@ export default Vue.extend({
     align-items: center;
 
     .title {
-      padding: 3rem;
+      padding: 1rem;
     }
   }
 
@@ -129,7 +141,7 @@ export default Vue.extend({
     display: flex;
     justify-content: center;
     border: 1px solid;
-    margin: 4rem;
+    margin: 2rem 4rem;
     padding: 2rem;
     border-radius: 5px;
     background-color: rgba(244, 247, 248, 1);
@@ -148,13 +160,13 @@ export default Vue.extend({
 
   .certificationUl {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 30% 30% 30%;
     justify-content: center;
     align-items: center;
-    padding: 3rem;
 
     .certificationLi {
       list-style: none;
+      margin: 1.5rem 1rem;
     }
 
     .certification {
@@ -165,10 +177,10 @@ export default Vue.extend({
   @media (max-width: 760px) {
     .goalList {
       display: grid;
-      grid-template-columns: 80%;
+      grid-template-columns: 100%;
       justify-content: center;
       align-items: center;
-      padding: 1rem;
+      padding: 2rem;
 
       .goal {
         font-size: 1rem;
