@@ -88,7 +88,6 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .wrapper {
-  height: 100%;
   min-height: 100%;
   background-color: rgba(30, 32, 35, 1);
   margin: 0;

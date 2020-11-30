@@ -2,24 +2,23 @@
   <div class="wrapper">
     <div class="header">
       <h2 class="title">
-        {{ this.$route.query.groupName }} 의 {{ today }} 인증 현황
+        {{ this.$route.query.groupName }} 의 이번 루틴 인증 현황
       </h2>
+      * 인증 검사는 루틴 종료 날 가능합니다 *
     </div>
     <div class="goalList">
       <div>
-        <h2 class="goal">
-          <p>그룹원들의 이번 루틴 목표</p>
-        </h2>
+        <h3 class="goal">그룹원들의 이번 루틴 목표</h3>
         <br />
-        <div class="goal" v-for="(goal, index) in goalList" :key="index">
-          {{ goal.key }}: {{ goal.value }}
+        <div class="detailGoal" v-for="(goal, index) in goalList" :key="index">
+          {{ goal.key }} : {{ goal.value }}
         </div>
       </div>
     </div>
     <ul class="certificationUl">
       <li
-        v-for="certification in certificationList"
-        :key="certification.userName"
+        v-for="(certification, index) in certificationList"
+        :key="index"
         class="certificationLi"
       >
         <h4>{{ certification.userName }}</h4>
@@ -110,7 +109,8 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .wrapper {
-  height: 100%;
+  background-color: rgba(30, 32, 35, 1);
+  color: white;
   min-height: 100%;
   margin: 0;
 
@@ -129,19 +129,26 @@ export default Vue.extend({
     display: flex;
     justify-content: center;
     border: 1px solid;
-    margin: 4rem 4rem 4rem 4rem;
-    padding: 2rem 2rem 2rem 2rem;
+    margin: 4rem;
+    padding: 2rem;
     border-radius: 5px;
+    background-color: rgba(244, 247, 248, 1);
+    color: black;
 
     .goal {
       display: flex;
       justify-content: center;
     }
+
+    .detailGoal {
+      display: flex;
+      justify-content: flex-start;
+    }
   }
 
   .certificationUl {
     display: grid;
-    grid-template-columns: 30% 30% 30%;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-content: center;
     align-items: center;
     padding: 3rem;
@@ -161,7 +168,16 @@ export default Vue.extend({
       grid-template-columns: 80%;
       justify-content: center;
       align-items: center;
-      padding: 3rem;
+      padding: 1rem;
+
+      .goal {
+        font-size: 1rem;
+      }
+    }
+
+    .certificationUl {
+      display: grid;
+      grid-template-columns: 1fr;
     }
   }
 }
