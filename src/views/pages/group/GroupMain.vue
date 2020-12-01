@@ -248,6 +248,19 @@ export default Vue.extend({
         });
       }
     },
+    async finishRoutine() {
+      if (!(await this.$confirm('루틴을 종료하시겠습니까?'))) return;
+      try {
+        await axios.post(
+          `http://localhost:8080/routine/${this.$route.params.id}`,
+          {},
+          { headers: this.headers }
+        );
+        this.$snackbar.success('성공적으로 종료되었습니다 !');
+      } catch (err) {
+        this.$snackbar.error(err.response.data.message);
+      }
+    },
   },
 });
 </script>
