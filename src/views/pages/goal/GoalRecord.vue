@@ -68,6 +68,9 @@ export default Vue.extend({
           { headers: this.headers }
         );
         this.recordList = data.data;
+        if (this.recordList.length == 0) {
+          this.$snackbar.info('그룹 결과 기록이 아직 존재하지 않습니다!');
+        }
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }

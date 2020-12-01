@@ -12,6 +12,7 @@ import Update from '@/views/pages/posts/Update.vue';
 import List from '@/views/pages/posts/List.vue';
 import CertificationCreate from '@/views/pages/certification/CertificationCreate.vue';
 import CertificationList from '@/views/pages/certification/CertificationList.vue';
+import GoalRecord from '@/views/pages/goal/GoalRecord.vue';
 
 const routes: Array<RouteConfig> = [
   {
@@ -48,6 +49,11 @@ const routes: Array<RouteConfig> = [
     path: '/certificationList/:groupId',
     name: 'certificationList',
     component: CertificationList,
+  },
+  {
+    path: '/goalRecord/:groupId',
+    name: 'goalRecord',
+    component: GoalRecord,
   },
   {
     path: '/save',
