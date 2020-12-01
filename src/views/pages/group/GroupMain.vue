@@ -8,6 +8,13 @@
       >
         루틴 생성하기
       </BaseButton>
+      <BaseButton
+        v-if="me.email === ownerEmail && today === activeRoutineEndDate"
+        @click="finishRoutine"
+        color="danger"
+      >
+        루틴 종료하기
+      </BaseButton>
       <BaseButton v-if="activeRoutineStartDate" color="success">
         루틴 진행 중
       </BaseButton>
@@ -77,9 +84,11 @@ import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 import router from '@/router';
+import { setCookie, getCookie } from '@/utils/cookie/cookie';
 import GroupSetting from './GroupSetting.vue';
 import GroupInvite from './GroupInvite.vue';
 import GoalSet from '@/views/pages/goal/GoalSet.vue';
+import RoutineEndNotice from './RoutineEndNotice.vue';
 
 export default Vue.extend({
   name: 'GroupMain',
@@ -94,11 +103,14 @@ export default Vue.extend({
       certificationDailyCheck: '',
     };
   },
-  beforeMount() {
+  async beforeMount() {
     this.getGroupOwnerEmail();
-    this.getRoutineInfo();
+    await this.getRoutineInfo();
     this.getDailyCheckInfo();
     this.today = this.getFormatDate(new Date());
+    if (this.today === this.activeRoutineEndDate) {
+      this.getRoutineEndNotice();
+    }
   },
   computed: {
     headers(): object {
@@ -224,6 +236,18 @@ export default Vue.extend({
         },
       });
     },
+    getRoutineEndNotice() {
+      if (!getCookie()) {
+        setCookie('routineEnd', 'Y', 1);
+      }
+      if (getCookie() !== 'N') {
+        this.$popup.open({
+          component: RoutineEndNotice,
+          notClose: true,
+          preventClose: true,
+        });
+      }
+    },
   },
 });
 </script>
@@ -331,6 +355,11 @@ export default Vue.extend({
       }
     }
 
+    .goFeedback {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.9rem;
+    }
     .content {
       width: 90%;
       font-size: 0.7rem;
