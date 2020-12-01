@@ -1,5 +1,9 @@
 <template>
-  <vs-dialog v-model="isOpen" :prevent-close="preventClose">
+  <vs-dialog
+    v-model="isOpen"
+    :prevent-close="preventClose"
+    :not-close="notClose"
+  >
     <component :is="popupComponent" :popupData="popupData"></component>
   </vs-dialog>
 </template>
@@ -22,6 +26,9 @@ export default Vue.extend({
     },
     preventClose(): boolean {
       return this.$store.state.popup.preventClose;
+    },
+    notClose(): boolean {
+      return this.$store.state.popup.notClose;
     },
     popupComponent(): any {
       return this.$store.state.popup.component;

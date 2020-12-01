@@ -4,6 +4,7 @@ export const popupState = (): PopupState => ({
   isOpen: false,
   component: null,
   preventClose: false,
+  notClose: false,
   data: null,
 });
 
@@ -16,6 +17,7 @@ export const mutations = {
     state.isOpen = false;
     state.component = null;
     state.preventClose = false;
+    state.notClose = false;
     state.data = null;
   },
 };
