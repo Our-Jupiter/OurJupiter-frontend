@@ -1,5 +1,9 @@
 <template>
   <div class="main">
+    <div class="service-name">
+      <img :src="require('@/assets/logo.png')" style="width: 35px" />
+      아워목성
+    </div>
     <h2>{{ $route.query.groupName }}</h2>
     <div class="manage">
       <BaseButton
@@ -274,8 +278,14 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3rem 2rem;
+  padding: 2rem 2rem;
 
+  .service-name {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
   .manage {
     width: 100%;
     display: flex;

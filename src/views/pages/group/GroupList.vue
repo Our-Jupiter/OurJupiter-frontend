@@ -1,5 +1,9 @@
 <template>
   <div class="wrapper">
+    <div class="service-name">
+      <img :src="require('@/assets/logo.png')" style="width: 35px" />
+      아워목성
+    </div>
     <div class="header">
       <h2 class="title">{{ me.name }} 님의 목성 공간들</h2>
       <div class="button">
@@ -90,14 +94,20 @@ export default Vue.extend({
 .wrapper {
   min-height: 100%;
   background-color: rgba(30, 32, 35, 1);
+  color: white;
   margin: 0;
+
+  .service-name {
+    display: inline-block;
+    padding: 1.5rem 0 0 3rem;
+    font-size: 20px;
+  }
 
   .header {
     display: flex;
     justify-content: flex-end;
 
     .title {
-      color: white;
       padding: 2rem;
     }
     .button {
