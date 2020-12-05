@@ -38,7 +38,7 @@
         <h2 class="name">{{ me.name }}</h2>
       </div>
       <div class="button">
-        <BaseButton @click="enterFeed($route.params.id)">그룹 피드</BaseButton>
+        <BaseButton @click="enterFeed">그룹 피드</BaseButton>
         <BaseButton @click="enterRecord">결과 기록</BaseButton>
         <BaseButton v-if="activeRoutineStartDate" @click="enterlist"
           >인증 현황</BaseButton
@@ -147,8 +147,16 @@ export default Vue.extend({
       );
       this.ownerEmail = data.data;
     },
-    enterFeed(groupId: number) {
-      router.push({ path: `/list/${groupId}` });
+    enterFeed() {
+      router.push({
+        name: 'list',
+        params: {
+          groupId: this.$route.params.id,
+        },
+        query: {
+          groupName: this.$route.query.groupName,
+        },
+      });
     },
     enterRecord() {
       router.push({
