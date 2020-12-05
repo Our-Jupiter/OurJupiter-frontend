@@ -218,6 +218,7 @@ export default Vue.extend({
         },
         { headers: this.headers }
       );
+      this.getRoutineInfo();
     },
     async getGoalPenalty() {
       try {
