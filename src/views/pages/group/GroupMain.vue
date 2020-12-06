@@ -205,10 +205,16 @@ export default Vue.extend({
       const data = await axios.get(
         `http://localhost:8080/routine/${this.$route.params.id}`
       );
-      this.activeRoutineStartDate = data.data;
-      this.activeRoutineEndDate = moment(data.data, 'YYYY-MM-DD')
-        .add(13, 'days')
-        .format('YYYY-MM-DD');
+
+      if (data.data) {
+        this.activeRoutineStartDate = data.data;
+        this.activeRoutineEndDate = moment(data.data, 'YYYY-MM-DD')
+          .add(13, 'days')
+          .format('YYYY-MM-DD');
+      } else {
+        this.activeRoutineStartDate = '';
+        this.activeRoutineEndDate = '';
+      }
     },
     async getDailyCheckInfo() {
       const data = await axios.get(
@@ -270,6 +276,7 @@ export default Vue.extend({
           { headers: this.headers }
         );
         this.$snackbar.success('성공적으로 종료되었습니다 !');
+        this.getRoutineInfo();
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }
