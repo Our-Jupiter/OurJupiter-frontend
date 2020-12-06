@@ -5,7 +5,7 @@ import store from './store';
 import './assets/css/style-loader';
 import { PluginInterface } from './plugins/types';
 import Vuesax from 'vuesax4';
-import { vsIcon } from 'vuesax3';
+import { vsIcon, vsTextarea } from 'vuesax3';
 import 'vuesax3/dist/vuesax.css';
 import 'vuesax4/dist/vuesax.min.css';
 import 'material-icons/iconfont/material-icons.css';
@@ -22,7 +22,7 @@ class OurJupiter {
 
   private registerVuesax() {
     Vue.use(Vuesax);
-    const vuesax3Comps = [vsIcon];
+    const vuesax3Comps = [vsIcon, vsTextarea];
     vuesax3Comps.forEach(comp => {
       Vue.use(comp);
     });
