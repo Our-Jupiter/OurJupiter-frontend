@@ -6,9 +6,7 @@
     <div class="header">
       <h2>그룹 피드</h2>
       <br />
-      <BaseButton @click="savePost($route.params.id)">
-        글 등록
-      </BaseButton>
+      <BaseButton @click="savePost">글 등록</BaseButton>
     </div>
     <br />
     <ul class="postList">
@@ -16,7 +14,7 @@
         <router-link
           :to="{
             name: 'detail',
-            params: { id: post.id, groupId: $route.params.id },
+            params: { postId: post.id, groupId: $route.params.groupId },
           }"
         >
           <BaseCard
@@ -57,7 +55,7 @@ export default Vue.extend({
     async getData() {
       try {
         const data = await axios.get('http://localhost:8080/board/', {
-          params: { groupId: this.$route.params.id },
+          params: { groupId: this.$route.params.groupId },
         });
         this.allData = data.data;
 
@@ -71,13 +69,16 @@ export default Vue.extend({
       }
     },
     savePost() {
-      router.push({ name: 'save', params: { id: this.$route.params.id } });
+      router.push({
+        name: 'save',
+        params: { groupId: this.$route.params.groupId },
+      });
     },
     back() {
       router.push({
         name: 'groupMain',
         params: {
-          groupId: this.$route.params.id,
+          groupId: this.$route.params.groupId,
         },
         query: {
           groupName: this.$route.query.groupName,

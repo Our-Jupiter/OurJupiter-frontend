@@ -1,35 +1,28 @@
 <template>
   <div class="save">
+    <h2>글 등록</h2>
     <div class="form">
       <form id="UploadForm" enctype=”multipart/form-data” name="upload">
-        <div class="form-group">
-          <BaseInput v-model= "title" type="text" class="form-control" id="title" label="제목"/>
-        </div>
-        <div class="form-group">
-          <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자" :placeholder="$store.state.me.me.name" disabled />
-        </div>
-        <br>
-        <div class="form-group">
-          <label>내용: </label>
-          <textarea v-model= "content" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
-        </div>
-        <br>
-        <div class="form-group">
-          <div class="custom-file" id="inputFile">
-            <label class="custom-file-label" for="customFile">파일을 선택해 주세요. </label>
-            <input name="file" type="file" class="custom-file-input" id="customFile" ref="file" @change="uploadImage">
+        <BaseInput v-model="title" type="text" label="제목" />
+        <BaseInput v-model="author" type="text" label="작성자" :placeholder="$store.state.me.me.name" disabled />
+        <br />
+        <BaseTextBox v-model="content" label="내용" placeholder="내용을 입력하세요" />
+        <br />
+        <div>
+          <div>
+            <label>파일을 선택해 주세요.</label>
+            <input name="file" type="file" ref="file" @change="uploadImage">
           </div>
           <div class="image-preview" v-if="imageData.length > 0">
             <img class="preview" :src="imageData" width="50%" height="50%">
           </div>
         </div>
       </form>
-      </div>
-      <div class="button">
-        <BaseButton @click="back()">취소</BaseButton>
-        <BaseButton @click="save">등록</BaseButton>
-      </div>
-    
+    </div>
+    <div class="button">
+      <BaseButton @click="back">취소</BaseButton>
+      <BaseButton @click="save">등록</BaseButton>
+    </div>
   </div>
 </template>
 
@@ -50,9 +43,6 @@ export default Vue.extend({
     };
   },
   methods: {
-    back() {
-      router.push({ name: 'list', params: { id: this.$route.params.id } });
-    },
     async save() {
       const form = new FormData(
         document.getElementById('UploadForm') as HTMLFormElement
@@ -62,21 +52,21 @@ export default Vue.extend({
       form.append('content', this.content);
       form.append('author', this.$store.state.me.me.name);
       form.append('authorEmail', this.$store.state.me.me.email);
-      form.append('groupId', this.$route.params.id);
+      form.append('groupId', this.$route.params.groupId);
 
       if (!this.title) {
-        this.$snackbar.warn('제목을 모두 입력해주세요');
+        this.$snackbar.warn('제목을 입력해주세요');
         return;
       }
 
       try {
-        const data = await axios.post('http://localhost:8080/board', form, {
+        await axios.post('http://localhost:8080/board', form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
         this.$snackbar.success('글이 등록되었습니다!');
-        router.push({ path: `/list/${this.$route.params.id}` });
+        router.go(-1);
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
       }
@@ -90,6 +80,9 @@ export default Vue.extend({
         };
         reader.readAsDataURL(input.files[0]);
       }
+    },
+    back() {
+      router.go(-1);
     },
   },
 });

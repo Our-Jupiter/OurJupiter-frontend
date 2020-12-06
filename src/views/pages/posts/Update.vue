@@ -1,21 +1,17 @@
 <template>
   <div class="update">
+    <h2>글 수정</h2>
     <div class="form">
       <form id="UploadForm" enctype=”multipart/form-data” name="upload">
-        <div class="form-group">
-          <BaseInput v-model= "title" type="text" class="form-control" id="title" label="제목"></BaseInput>
-        </div>
-        <div class="form-group">
-          <BaseInput type="text" v-model= "author" class="form-control" id="author" label="작성자" disabled>postData.author</BaseInput>
-        </div>
-        <div class="form-group">
-          <label>내용: </label>
-          <textarea v-model= "content" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
-        </div><br>
-        <div class="form-group">
-          <div class="custom-file" id="inputFile">
-            <label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
-            <input name="file" type="file" class="custom-file-input" id="customFile" ref="file" @change="previewImage">
+        <BaseInput v-model="title" type="text" label="제목" />
+        <BaseInput v-model="author" type="text" label="작성자" :placeholder="$store.state.me.me.name" disabled />
+        <br />
+        <BaseTextBox v-model="content" label="내용" placeholder="내용을 입력하세요" />
+        <br />
+        <div>
+          <div>
+            <label>파일을 선택해 주세요.</label>
+            <input name="file" type="file" ref="file" @change="previewImage">
           </div>
           <div class="image-preview" v-if="imageData">
             <img class="preview" :src="imageData" width="50%" height="50%">
@@ -23,8 +19,8 @@
         </div>
       </form>
       <div class="button">
-      <BaseButton @click="back">취소</BaseButton>
-      <BaseButton @click="update">등록</BaseButton>
+        <BaseButton @click="back">취소</BaseButton>
+        <BaseButton @click="update">등록</BaseButton>
       </div>
     </div>
   </div>
@@ -44,7 +40,7 @@ export default Vue.extend({
       title: '',
       author: '',
       content: '',
-      fileId:'',
+      fileId: '',
     };
   },
   beforeMount() {
@@ -52,12 +48,18 @@ export default Vue.extend({
   },
   methods: {
     back() {
-      router.push({ name: 'detail', params: { id: this.$route.params.id, groupId: this.$route.params.groupId } });
+      router.push({
+        name: 'detail',
+        params: {
+          postId: this.$route.params.postId,
+          groupId: this.$route.params.groupId,
+        },
+      });
     },
     async getData() {
       try {
-        const id = this.$route.params.id;
-        const data = await axios.get('http://localhost:8080/board/' + id);
+        const postId = this.$route.params.postId;
+        const data = await axios.get('http://localhost:8080/board/' + postId);
         this.title = data.data.title;
         this.author = data.data.author;
         this.content = data.data.content;
@@ -71,7 +73,7 @@ export default Vue.extend({
         this.$snackbar.error(err.response.data.message);
       }
     },
-    previewImage: function(event: Event) {
+    previewImage: function (event: Event) {
       const input = event.target as HTMLInputElement;
       if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -82,7 +84,7 @@ export default Vue.extend({
       }
     },
     async update() {
-      const id = this.$route.params.id;
+      const postId = this.$route.params.postId;
       const form = new FormData(
         document.getElementById('UploadForm') as HTMLFormElement
       );
@@ -97,14 +99,18 @@ export default Vue.extend({
       }
 
       try {
-        await axios.put('http://localhost:8080/board/' + id, form, {
+        await axios.put('http://localhost:8080/board/' + postId, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
         this.$snackbar.success('글이 수정되었습니다!');
-        router.push({ name: 'detail',
-        params: { id: id, groupId: this.$route.params.groupId },
+        router.push({
+          name: 'detail',
+          params: {
+            postId: this.$route.params.postId,
+            groupId: this.$route.params.groupId,
+          },
         });
       } catch (err) {
         this.$snackbar.error(err.response.data.message);
@@ -135,17 +141,17 @@ export default Vue.extend({
   }
 
   @media (max-width: 760px) {
-  .form {
+    .form {
       display: grid;
       grid-template-columns: 80%;
       justify-content: center;
       align-items: center;
       padding: 3rem;
     }
-  .button {
-    display: flex;
-    margin: 1rem 3rem;
+    .button {
+      display: flex;
+      margin: 1rem 3rem;
+    }
   }
-}
 }
 </style>

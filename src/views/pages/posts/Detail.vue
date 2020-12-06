@@ -1,18 +1,18 @@
 <template>
   <div class="main">
     <div class="content">
-      <div class="hidden" style="display:none">
+      <div class="hidden" style="display: none">
         <input type="text" class="form-control" id="id" readonly />
       </div>
-      <h5 class="card-title">제목: {{ postData.title }}</h5>
-      <h5 class="card-title">작성자: {{ postData.author }}</h5>
-      <p class="card-text">
-        <small class="text-muted">
+      <h5>제목: {{ postData.title }}</h5>
+      <h5>작성자: {{ postData.author }}</h5>
+      <p>
+        <small>
           <b>수정 날짜:</b>
           {{ postData.modifiedDate }}
         </small>
       </p>
-      <p class="card-text">
+      <p>
         <b>내용:</b>
         {{ postData.content }}
       </p>
@@ -21,15 +21,15 @@
       </div>
     </div>
     <div class="button">
-      <div class="col-auto">
+      <div>
         <BaseButton @click="backToFeed($route.params.groupId)">
           목록으로 돌아가기
         </BaseButton>
       </div>
-      <div class="col-auto" v-if="me.email === postData.authorEmail">
+      <div v-if="me.email === postData.authorEmail">
         <BaseButton @click="enterUpdate(postData.id)">수정</BaseButton>
       </div>
-      <div class="col-auto" v-if="me.email === postData.authorEmail">
+      <div v-if="me.email === postData.authorEmail">
         <BaseButton @click="deletePost">삭제</BaseButton>
       </div>
     </div>
@@ -44,7 +44,7 @@ import router from '@/router';
 export default Vue.extend({
   name: 'Detail',
   beforeMount() {
-    this.detail();
+    this.getDetail();
   },
   computed: {
     me(): object {
@@ -61,16 +61,19 @@ export default Vue.extend({
     enterUpdate(postId: string) {
       router.push({
         name: 'update',
-        params: { id: postId, groupId: this.$route.params.groupId },
+        params: {
+          groupId: this.$route.params.groupId,
+          postId,
+        },
       });
     },
     backToFeed(groupId: number) {
       router.push({ path: `/list/${groupId}` });
     },
-    async detail() {
+    async getDetail() {
       try {
-        const id = this.$route.params.id;
-        const data = await axios.get('http://localhost:8080/board/' + id);
+        const postId = this.$route.params.postId;
+        const data = await axios.get('http://localhost:8080/board/' + postId);
         this.postData = data.data;
 
         const fileId = data.data.fileId;
@@ -82,8 +85,8 @@ export default Vue.extend({
     async deletePost() {
       try {
         const groupId = this.$route.params.groupId;
-        const id = this.$route.params.id;
-        await axios.delete('http://localhost:8080/board/' + id);
+        const postId = this.$route.params.postId;
+        await axios.delete('http://localhost:8080/board/' + postId);
         this.$snackbar.success('글이 삭제되었습니다!');
         router.push({ path: `/list/${groupId}` });
       } catch (err) {

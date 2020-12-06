@@ -56,22 +56,22 @@ const routes: Array<RouteConfig> = [
     component: GoalRecord,
   },
   {
-    path: '/save',
+    path: '/save/:groupId',
     name: 'save',
     component: Save,
   },
   {
-    path: '/detail/:id',
+    path: '/detail/:groupId/:postId',
     name: 'detail',
     component: Detail,
   },
   {
-    path: '/update/:id',
+    path: '/update/:groupId/:postId',
     name: 'update',
     component: Update,
   },
   {
-    path: '/list/:id',
+    path: '/list/:groupId',
     component: List,
     name: 'list',
   },
