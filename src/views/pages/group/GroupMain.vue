@@ -233,6 +233,7 @@ export default Vue.extend({
         },
         { headers: this.headers }
       );
+      this.$snackbar.success('새로운 루틴이 생성되었습니다 !');
       this.getRoutineInfo();
     },
     async getGoalPenalty() {
