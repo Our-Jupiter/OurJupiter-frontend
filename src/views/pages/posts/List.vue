@@ -78,7 +78,7 @@ export default Vue.extend({
       router.push({
         name: 'groupMain',
         params: {
-          groupId: this.$route.params.groupId,
+          id: this.$route.params.groupId,
         },
         query: {
           groupName: this.$route.query.groupName,

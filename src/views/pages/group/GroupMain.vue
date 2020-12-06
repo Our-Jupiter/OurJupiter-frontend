@@ -71,11 +71,12 @@
     </div>
     <div class="daily" v-if="activeRoutineStartDate && goal">
       <div v-if="!certificationDailyCheck">
-        <h3>{{ today }}</h3>
+        <h2 class="today">{{ today }}</h2>
+        <br />
         <h3>오늘 인증을 아직 하지 않았습니다! 인증해주세요</h3>
       </div>
       <div v-else>
-        <h3>{{ today }}</h3>
+        <h2 class="today">{{ today }}</h2>
         <br />
         <h3>오늘의 인증을 완료하였습니다!</h3>
       </div>
@@ -363,7 +364,7 @@ export default Vue.extend({
     padding: 2rem;
     border-radius: 5px;
 
-    .todayDaily {
+    .today {
       display: flex;
       justify-content: center;
     }

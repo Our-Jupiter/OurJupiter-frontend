@@ -1,5 +1,10 @@
 <template>
   <div class="join">
+    <div class="service-name">
+      <img :src="require('@/assets/logo.png')" style="width: 200px" />
+      <h2 class="title">아워목성 회원가입</h2>
+      <br />
+    </div>
     <BaseInput v-model="email" label="이메일" />
     <BaseInput v-model="name" label="닉네임" />
     <BaseInput
@@ -7,6 +12,7 @@
       label="비밀번호(8자리 이상)"
       type="password"
     />
+    <br />
     <BaseButton @click="join">회원가입</BaseButton>
   </div>
 </template>
@@ -61,6 +67,12 @@ export default Vue.extend({
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 5rem;
+  padding: 2rem;
+
+  .title {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>

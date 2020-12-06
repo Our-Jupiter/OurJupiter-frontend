@@ -1,7 +1,13 @@
 <template>
   <div class="login">
+    <div class="service-name">
+      <img :src="require('@/assets/logo.png')" style="width: 200px" />
+      <h2 class="title">아워목성 로그인</h2>
+      <br />
+    </div>
     <BaseInput v-model="email" label="이메일" />
     <BaseInput v-model="password" label="비밀번호" type="password" />
+    <br />
     <BaseButton @click="login">Login</BaseButton>
     <router-link to="/join" style="color: rgb(25, 91, 255)">
       아직 회원이 아니신가요?
@@ -54,6 +60,12 @@ export default Vue.extend({
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10rem;
+  padding: 5rem;
+
+  .title {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>
