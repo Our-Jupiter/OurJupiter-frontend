@@ -10,14 +10,20 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const noAuthPaths = ['/login', '/join'];
+
+  if (to.matched.length === 0) {
+    next('/login');
+    return;
+  }
+
   const path = to.matched[to.matched.length - 1].path;
 
   if (localStorage.getItem('token') === null && !noAuthPaths.includes(path)) {
-    if (to.path !== '/login') {
+    if (path !== '/login') {
       next('/login');
     }
   } else if (localStorage.getItem('token') !== null && noAuthPaths.includes(path)) {
-    if (to.path !== '/group') {
+    if (path !== '/group') {
       next('/group');
     }
   } else {
