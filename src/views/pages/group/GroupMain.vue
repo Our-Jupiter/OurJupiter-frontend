@@ -127,7 +127,7 @@ export default Vue.extend({
     },
   },
   watch: {
-    activeRoutineStartDate(newValue: string) {
+    activeRoutineStartDate() {
       if (this.activeRoutineStartDate) {
         this.getGoalPenalty();
       }
@@ -258,10 +258,7 @@ export default Vue.extend({
       });
     },
     getRoutineEndNotice() {
-      if (!getCookie()) {
-        setCookie('routineEnd', 'Y', 1);
-      }
-      if (getCookie() !== 'N') {
+      if (getCookie('routineEnd') !== 'N') {
         this.$popup.open({
           component: RoutineEndNotice,
           notClose: true,

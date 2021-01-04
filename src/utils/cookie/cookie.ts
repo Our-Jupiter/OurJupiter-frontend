@@ -1,20 +1,29 @@
-export function setCookie(name: string, value: string, expiredays: number) {
+export function setCookie(
+  cookieName: string,
+  cookieValue: string,
+  expiredays: number
+) {
   const date = new Date();
 
   date.setDate(date.getDate() + expiredays);
 
-  document.cookie = escape(name) + '=' + escape(value) + '; path=/; expires=' + date.toUTCString();
+  document.cookie =
+    escape(cookieName) +
+    '=' +
+    escape(cookieValue) +
+    '; path=/; expires=' +
+    date.toUTCString();
 }
 
-export function getCookie() {
-  const cookie = document.cookie;
+export function getCookie(cookieName: string) {
+  if (document.cookie !== '') {
+    const cookies = document.cookie.split('; ');
 
-  if (cookie !== '') {
-    const cookieArray = cookie.split('; ');
-    for (const index in cookieArray) {
-      const cookieName = cookieArray[index].split('=');
-      if (cookieName[0] == 'routineEnd') {
-        return cookieName[1];
+    for (const cookie of cookies) {
+      const name = cookie.substr(0, cookie.indexOf('='));
+      const value = cookie.substr(cookie.indexOf('=') + 1);
+      if (name == cookieName) {
+        return unescape(value);
       }
     }
   }

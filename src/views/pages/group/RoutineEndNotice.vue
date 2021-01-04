@@ -15,7 +15,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { setCookie } from '@/utils/cookie/cookie';
-import BaseCheckBox from '@/views/common/input-components/BaseCheckBox.vue';
 
 export default Vue.extend({
   name: 'RoutineEndNotice',
