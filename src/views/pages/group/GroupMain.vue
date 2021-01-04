@@ -89,7 +89,8 @@ import Vue from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 import router from '@/router';
-import { setCookie, getCookie } from '@/utils/cookie/cookie';
+import { getCookie } from '@/utils/cookie.ts';
+import { getFormatDate } from '@/utils/date.ts';
 import GroupSetting from './GroupSetting.vue';
 import GroupInvite from './GroupInvite.vue';
 import GoalSet from '@/views/pages/goal/GoalSet.vue';
@@ -112,7 +113,7 @@ export default Vue.extend({
     this.getGroupOwnerEmail();
     await this.getRoutineInfo();
     this.getDailyCheckInfo();
-    this.today = this.getFormatDate(new Date());
+    this.today = getFormatDate(new Date());
     if (this.today === this.activeRoutineEndDate) {
       this.getRoutineEndNotice();
     }
@@ -134,14 +135,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    getFormatDate(date: any) {
-      const year = date.getFullYear(); //yyyy
-      let month = 1 + date.getMonth(); //M
-      month = month >= 10 ? month : '0' + month; //month 두자리로 저장
-      let day = date.getDate(); //d
-      day = day >= 10 ? day : '0' + day; //day 두자리로 저장
-      return year + '-' + month + '-' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
-    },
     async getGroupOwnerEmail() {
       const data = await axios.get(
         'http://localhost:8080/group/' + this.$route.params.id

@@ -26,7 +26,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import router from '@/router';
-import moment from 'moment';
+import { getFormatDate } from '@/utils/date.ts';
 
 export default Vue.extend({
   name: 'GoalRecord',
@@ -40,7 +40,7 @@ export default Vue.extend({
     };
   },
   async beforeMount() {
-    this.today = this.getFormatDate(new Date());
+    this.today = getFormatDate(new Date());
     await this.getRecord();
   },
   computed: {
@@ -53,14 +53,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    getFormatDate(date: any) {
-      const year = date.getFullYear(); //yyyy
-      let month = 1 + date.getMonth(); //M
-      month = month >= 10 ? month : '0' + month; //month 두자리로 저장
-      let day = date.getDate(); //d
-      day = day >= 10 ? day : '0' + day; //day 두자리로 저장
-      return year + '-' + month + '-' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
-    },
     async getRecord() {
       try {
         const data = await axios.get(

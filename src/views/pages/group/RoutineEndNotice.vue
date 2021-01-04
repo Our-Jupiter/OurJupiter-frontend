@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { setCookie } from '@/utils/cookie/cookie';
+import { setCookie } from '@/utils/cookie.ts';
 
 export default Vue.extend({
   name: 'RoutineEndNotice',
