@@ -8,9 +8,9 @@ export function setCookie(
   date.setDate(date.getDate() + expiredays);
 
   document.cookie =
-    escape(cookieName) +
+    encodeURIComponent(cookieName) +
     '=' +
-    escape(cookieValue) +
+    encodeURIComponent(cookieValue) +
     '; path=/; expires=' +
     date.toUTCString();
 }
@@ -23,7 +23,7 @@ export function getCookie(cookieName: string) {
       const name = cookie.substr(0, cookie.indexOf('='));
       const value = cookie.substr(cookie.indexOf('=') + 1);
       if (name == cookieName) {
-        return unescape(value);
+        return decodeURIComponent(value);
       }
     }
   }
